@@ -1,0 +1,339 @@
+.pt-popover-content {
+    max-width: 400px;
+}
+
+.input-wrap {
+    display: flex;
+    flex-shrink: 0;
+    position: relative;
+    // background: whitesmoke;
+
+    .name {
+        position: absolute;
+        white-space: nowrap;
+        right: 5px;
+        bottom: 5px;
+        display: none;
+        color: rgb(101, 124, 160);
+        z-index: 11;
+        &.shown {
+            display: block;
+        }
+        .pt-editable-editing {
+            color: black;
+        }
+    }
+
+    .ReactCodeMirror {
+        flex-grow: 1;
+        width: 0;
+    }
+
+    .CodeMirror-lines {
+        padding: 10px 0;
+        min-height: 90px;
+    }
+
+    .CodeMirror-scroll {
+        max-height: 600px;
+    }
+
+    .CodeMirror pre.CodeMirror-placeholder { 
+        // color: #999; 
+        // font-family: Avenir, Helvetica, sans-serif;
+        // padding-top: 3px;
+
+        color: #999;
+        font-family: Avenir, Helvetica, sans-serif;
+        /* padding-top: 9px; */
+        text-align: center;
+        top: 5px;
+        font-size: 15px;
+    }
+
+    .CodeMirror pre {
+        padding: 0 15px;
+        box-shadow: none;
+    }
+
+    .CodeMirror {
+        height: auto;
+        border-radius: 4px;
+        font-family: Menlo, Monaco, monospace;
+    }
+
+
+    .cm-matchhighlight {
+        border: 1px solid #b9b9b9;
+        border-radius: 2px;
+        margin: -1px;
+    }
+
+    .CodeMirror-completion {
+            color: #aaa;
+            // .prefix {
+            //   text-decoration: underline;
+            // }
+    }
+
+    .CodeMirror-placeholder {
+        color: #aaa;
+    }
+
+    .CodeMirror-matchingbracket {
+        color: black !important;
+        border-bottom: 1px solid gray;
+        outline: none !important;
+    }
+
+    .cm-s-eclipse .CodeMirror-activeline-background {
+        background: rgba(237, 237, 243, 0.45);
+    }
+
+    // .CodeMirror-activeline-background {
+    //     background: none;
+    // }
+
+    // .CodeMirror-activeline-background.CodeMirror-linebackground:before {
+    //     content: "▸";
+    //     margin-left: -3px;
+    //     color: #d8d8d8;
+    // }
+
+    .cm-m-sql.cm-keyword {
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+}
+
+.stale .CodeMirror-lines {
+    background: repeating-linear-gradient(130deg, #ffffff, #ffffff 0.3em /* black stripe */,    #f7f7f7 0, #f7f7f7 0.6em /* blue stripe */ );  
+}
+
+.stale .CodeMirror-focused .CodeMirror-lines {
+    background: white;  
+}
+
+
+.slice {
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    -webkit-app-region: no-drag;
+}
+
+.bread-col.dragging * {
+    // opacity: 0.7;
+    cursor: move;
+}
+
+
+
+.slice .controls {
+    /* position: absolute; */
+    text-align: center;
+
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+
+    cursor: move;
+    flex-shrink: 0;
+    /* right: 10px; */
+    /* top: 6px; */
+    border-left: 1px solid #dfdfdf;
+    width: 40px;
+    padding: 4px;
+    
+    background: #f5f8fa;
+
+    display: flex;
+    flex-direction: column;
+
+
+    &.stale {
+        // background: repeating-linear-gradient(130deg,    #eaeaea, #eaeaea 0.3em /* black stripe */,    #f5f8fa 0, #f5f8fa 0.6em /* blue stripe */ );
+        // border-left: 1px dashed #dfdfdf;
+    }
+    .spacer {
+        flex-grow: 1;
+    }
+
+    .runnable.fa-play {
+        color: #82b982;
+    }
+
+    .pt-icon-code {
+        color: #377fea;
+    }
+
+    .fa-exclamation-triangle {
+        color: orange;
+    }
+
+    button:hover .fa-play {
+        color: green;
+    }
+
+    button:hover .fa-close {
+        color: maroon;
+    }
+
+    button:hover .fa-clone {
+        color: purple;
+    }
+}
+
+
+
+
+.slice.markdown .controls {
+    background: white;
+    border-left: 1px solid white;
+    transition: all 0.1s linear;
+}
+
+.slice.markdown .controls:hover, .bread-col.dragging .controls {
+    background: #f5faf6;
+    border-left: 1px solid #dfdfdf;
+}
+
+
+
+i.fa {
+    outline: none;
+}
+
+.slice .controls button {
+    background: transparent;
+    border: 0;
+    /* margin-left: 5px; */
+    cursor: pointer;
+    vertical-align: middle;
+    color: #aaa;
+    padding: 8px;
+    outline: none;
+    text-align: center;
+}
+
+.slice .header .button-toggle {
+    font-size: 11px;
+    margin-top: 5px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    color: gray;
+    margin-right: 5px;
+    -webkit-user-select: none;
+}
+
+.slice .header .button-toggle.active {
+    color: purple;
+}
+
+.slice .header .button:hover {
+    color: black;
+}
+
+.slice .header .button.active {
+    color: purple;
+}
+
+
+
+.schema-token {
+    background: rgba(0, 172, 193, 0.05);
+    border-radius: 2px;
+    padding: 0 2px;
+    color: #0015c4;
+    border: 1px solid rgba(0, 0, 255, 0.1);
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.slice-editor-widget {
+    position: absolute;
+    bottom: 3px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    z-index: 5;
+    opacity: 1;
+    line-height: 35px;
+
+    transition:  opacity 0.3s linear;
+
+    .token {
+        border: 1px solid #56CCF2;
+        background: #E4F8FF;
+        border-radius: 20px;
+        display: inline;
+        color: #56CCF2;
+        font-family: sans-serif;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .token.create-table {
+        border: 1px solid #ff7373;
+        background: #ffeddb;
+        color: #ff7373;
+    }
+
+    .token.create-text {
+        border: 1px solid #828282;
+        background: #ececec;
+        color: #909090;
+    }
+
+    &.slice-hidden {
+        opacity: 0;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+}
+
+
+.pt-menu-item-label {
+    max-width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+// .stale .fa-play, .bouncing {
+//   animation-duration: .5s;
+//   animation-fill-mode: both;
+//   animation-timing-function: linear;
+//   animation-iteration-count: infinite;
+//   animation-name: bounce;
+// }
+
+
+// @keyframes bounce {
+//   0%, 100% {
+//     transform: translateY(1px);
+//   }
+//   50% {
+//     transform: translateY(-2px);
+//   }
+// }
+
+
+.archived-slice {
+    .CodeMirror-lines {
+        background: #f5f4ed;
+    }
+
+    .controls {
+        background: #f3edea;
+        cursor: default;
+    }
+    button:hover .fa-trash {
+        color: maroon;
+    }
+    button:hover .fa-level-up {
+        color: green;
+    }
+}

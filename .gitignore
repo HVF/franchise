@@ -1,0 +1,7 @@
+/coverage
+/dist
+/node_modules
+/deploy
+/bundle
+npm-debug.log*
+**/.DS_Store

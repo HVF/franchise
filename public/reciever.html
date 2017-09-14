@@ -1,0 +1,10 @@
+<script>
+window.addEventListener("message", function(e){
+	sessionStorage.importData = e.data;
+	try {
+        window.top.location.replace(location.href.replace('reciever.html', ''))
+    } catch (err) {
+        window.top.location = location.href.replace('reciever.html', '')
+    }
+}, false);
+</script>

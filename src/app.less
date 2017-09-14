@@ -1,0 +1,325 @@
+@import '~normalize.css/normalize.css';
+@import "~@blueprintjs/core/dist/blueprint.css";
+@import '~@blueprintjs/table/dist/table.css';
+@import '~@blueprintjs/labs/dist/blueprint-labs.css';
+
+@import '~rc-tabs/assets/index.css';
+@import '~sweetalert2/dist/sweetalert2.css';
+
+@import '~codemirror/lib/codemirror.css';
+// @import '~codemirror/theme/eclipse.css';
+@import './cell/hipster.less';
+
+@import './bread.css';
+@import '~font-awesome/css/font-awesome.css';
+@import './cell/cell.less';
+@import './db/configure.less';
+@import './cell/visualizer.less';
+@import '~chartist/dist/chartist.css';
+
+html, body {
+    height: 100%;
+}
+
+body {
+    // background: #ededf3;
+    background: hsla(0, 0%, 97%, 1);
+    -webkit-app-region: drag;
+}
+
+
+.header {
+    overflow: auto;
+
+    h1 {
+        font-weight: 100;
+        padding: 0;
+        display: inline;
+        color: #151515;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+    .slogan {
+        // color: gray;
+        color: #8c8c8c;
+        font-weight: 200;
+        margin-left: 10px;
+        user-select: none;
+        cursor: default;
+    }
+    // margin: 30px 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-wrap {
+    padding: 35px 0;
+}
+
+.export-btn {
+    float: right;
+    background: #b9b9b9;
+    border: none;
+    padding: 9px 17px;
+    color: white;
+    border-radius: 5px;
+    margin: 0;
+    cursor: pointer;
+
+    i {
+        margin-right: 7px;
+    }
+}
+
+
+.export-btn:hover {
+    background: #aaa;
+}
+
+.bread-row.insert-top .divider.divider-top,
+.bread-row.insert-bottom .divider.divider-bottom,
+.bread-col.insert-left .vertical-divider.divider-left,
+.bread-col.insert-right .vertical-divider.divider-right {
+    background: #7786dc;
+    opacity: 1;
+}
+
+.fake-slice {
+    border: 2px dashed #d8d8d8;
+    border-radius: 4px;
+    min-height: 30px;
+    padding-bottom: 20px;
+    text-align: center;
+    font-size: 100px;
+    color: #d8d8d8;
+    -webkit-user-select: none;
+    cursor: pointer;
+    flex-grow: 1;
+    transition: all 200ms ease-in;
+    margin: 0 18px;
+    overflow: hidden;
+}
+
+.fake-slice:hover {
+    border: 2px dashed gray;
+    color: gray;
+}
+
+
+.archived-slice {
+    .bread-col {
+        padding: 10px 17px;
+    }
+}
+
+
+
+.toggler {
+    margin: 0px 20px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    cursor: default;
+}
+
+.bottom-spacer {
+    height: 100px;
+}
+
+
+.pt-tooltip {
+    box-shadow: none;
+}
+
+.write-queue {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fbf2e9;
+    
+    color: #dd9044;
+    z-index: 10;
+    border-top: 1px solid #e9b684;
+
+
+    .toggle-delta {
+        user-select: none;
+        padding: 15px 20px;
+        cursor: pointer;
+    }
+
+}
+
+.changes button {
+    background: none;
+    border: none;
+    color: #a50000;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.collapse {
+    overflow: auto;
+    padding: 15px 20px;
+    padding-bottom: 0;
+
+    .changes {
+        margin: 10px 0;
+        font-family: monospace;
+        background: #fff;
+        border-radius: 3px;
+        border: 1px solid #ddd;
+        padding: 10px;
+
+        .change {
+            margin-left: 20px;
+        }
+    }
+}
+
+
+.clippy-wrap {
+    
+    margin: 20px auto;
+    padding: 0 18px;
+
+    .clippy {
+        // background: rgba(255,255,255,.3);
+        // padding: 20px;
+        border-radius: 3px;
+        opacity: .8;
+        h2 {
+            font-size: inherit;
+        }
+        // h2 {
+        //     margin-top: 40px;
+        //     &:first-of-type {
+        //         margin-top: 0;
+        //     }
+        // }
+
+        pre {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        column-count: 2;
+        column-width: 300px;
+    }
+
+    .clippy-contents {
+        
+    }
+}
+
+.clippy section {
+    -webkit-column-break-inside: avoid;
+    overflow: auto;
+}
+
+
+.first-page {
+    min-height: 100vh;
+}
+
+.help-page {
+    background: white;
+    margin-top: -5px;
+    border-top: 1px solid #d7d8da;
+}
+
+.help-content {
+    padding: 20px 0;
+}
+
+.help-tab {
+    padding: 10px 20px;
+    background: white;
+    width: 200px;
+    width: fit-content;
+
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    border: 1px solid #d7d8da;
+    top: -40px;
+    height: 40px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    color: #4e4e4e;
+    border-bottom: none;
+
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+
+    cursor: pointer;
+
+    .pt-icon-help {
+        color: #aaa;
+        margin-right: 7px;
+    }
+}
+
+.configure {
+    margin: 0 18px;
+}
+
+.header {
+    padding: 0 18px;
+}
+
+
+@media (max-width: 700px) {
+    .bread-row > div {
+        display: block;
+    }
+
+    .vertical-divider {
+        display: none;
+    }
+
+    .header-wrap {
+        padding: 25px 0;
+    }
+
+    .header h1 {
+        font-size: 30px;
+    }
+
+    .slogan {
+        display: none;
+    }
+
+    .bread-row .bread-col, .fake-slice, .configure {
+        margin: 0 10px;
+    }
+    .clippy-wrap, .header {
+        padding: 0 10px;
+    }
+
+    
+
+}
+
+@media (min-width: 800px) {
+    .row-1, .configure-wrap, .clippy-wrap, .header {
+        max-width: 90vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+@media (min-width: 1000px) {
+    .row-1, .configure-wrap, .clippy-wrap, .header {
+        max-width: 70vw;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

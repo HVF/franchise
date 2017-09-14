@@ -1,0 +1,138 @@
+.bread-row > * {
+    display: flex;
+}
+
+.divider {
+    box-sizing: border-box;
+    height: 10px;
+
+    cursor: vertical-text;
+    padding: 2px 0;
+
+    background-clip: padding-box !important;
+    border: 3px solid transparent;
+    border-left: 0;
+    border-right: 0;
+
+    margin: 0 19px;
+
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+}
+
+.vertical-divider {
+    width: 1px;
+    padding: 0 2px;
+
+    background: transparent;
+    border: 7px solid transparent;
+    background-clip: padding-box !important;
+    border-bottom: 0;
+    border-top: 0;
+    flex-shrink: 0;
+
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+
+    cursor: text;
+}
+
+
+
+.vertical-divider::after {
+    width:1px;
+    background: #D4D4D4;   
+    content: " ";
+    height: 100%;
+    display: block;
+    flex-shrink: 0;
+}
+
+.divider:hover, .vertical-divider:hover {
+    opacity: 1;
+}
+
+.divider::after {
+    height:1px;
+    background: #D4D4D4;   
+    content: " ";
+    width: 100%;
+    display: block;
+}
+
+
+.bread-row.insert-top .divider.divider-top::after, 
+.bread-row.insert-bottom .divider.divider-bottom::after,
+.bread-col.insert-left .vertical-divider.divider-left::after,
+.bread-col.insert-right .vertical-divider.divider-right::after {
+    background: transparent;
+}
+
+.bread-col {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    /*border-right: 5px solid transparent;*/
+    /*padding:  5px 5px 7px 5px;*/
+    /*overflow: hidden;*/
+    transition: border-color 200ms ease-in;
+    display: flex;
+
+    padding: 5px 0;
+}
+
+
+.bread-enter {
+    /* 0 does not work so we have to use a small number */
+    /* Start our small */
+    flex: .00001;
+    overflow: hidden;
+
+    -webkit-animation: flexGrow 300ms ease forwards;
+    -o-animation: flexGrow 300ms ease forwards;
+    animation: flexGrow 300ms ease forwards;
+}
+
+
+.bread-exit {
+    flex: 1;
+    overflow: hidden;
+
+    -webkit-animation: flexShrink 300ms ease forwards;
+    -o-animation: flexShrink 300ms ease forwards;
+    animation: flexShrink 300ms ease forwards;
+}
+
+.bread-exit > * {
+    min-width: 200px;
+}
+
+
+@-webkit-keyframes flexGrow {
+    to { flex: 1; }
+}
+@-o-keyframes flexGrow {
+    to { flex: 1; }
+}
+@keyframes flexGrow {
+    to { flex: 1; }
+}
+
+@-webkit-keyframes flexShrink {
+    to {
+        flex: .01;
+        flex: .00001;
+    }
+}
+@-o-keyframes flexShrink {
+    to {
+        flex: .01;
+        flex: .00001;
+    }
+}
+@keyframes flexShrink {
+    to {
+        flex: .01;
+        flex: .00001;
+    }
+}

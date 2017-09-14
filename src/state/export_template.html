@@ -1,0 +1,117 @@
+<meta charset="utf-8">
+<title>Franchise Notebook {{notebook_name}}</title>
+<!--
+ _______  ______ _______ __   _ _______ _     _ _____ _______ _______
+ |______ |_____/ |_____| | \  | |       |_____|   |   |______ |______
+ |       |    \_ |     | |  \_| |_____  |     | __|__ ______| |______
+                                                                     
+ _______  _____                                                      
+ |______ |   __| |                                                   
+ ______| |____\| |_____                                              
+                                                                     
+ __   _  _____  _______ _______ ______   _____   _____  _     _      
+ | \  | |     |    |    |______ |_____] |     | |     | |____/       
+ |  \_| |_____|    |    |______ |_____] |_____| |_____| |    \_      
+                                                                     
+-->
+<style>
+body {
+  font-family: sans-serif;
+  padding: 100px;
+  background: #f7f7f7;
+}
+iframe {
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+}
+a {
+  font-size: large;
+}
+
+
+#click {
+  background: #2257d9;
+    padding: 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+/*https://projects.lukehaas.me/css-loaders/*/
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(34,87,217, 0.2);
+  border-right: 1.1em solid rgba(34,87,217, 0.2);
+  border-bottom: 1.1em solid rgba(34,87,217, 0.2);
+  border-left: 1.1em solid #2257d9;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+</style>
+
+<div class="loader" id="loader">Loading Franchise...</div>
+
+<center><a id="click" style="display:none" href="https://franchise.cloud/app/" target="_blank">Click here to open Franchise SQL Notebook</a></center>
+<script type="text/javascript">
+const DATA = {{bin_data}};
+</script>
+
+<script type="text/javascript">
+function sendData(target, src){
+  console.log(src)
+  if(typeof DATA != 'undefined'){
+    target.postMessage(DATA, '*')    
+  }
+}
+
+window.addEventListener("message", function(e){
+  console.log(e.data)
+  if(e.data == 'franchise-request-import'){
+    e.source.postMessage({ action: 'franchise-import', data: DATA }, '*')
+  }
+}, false)
+
+setTimeout(function(){
+  if(typeof DATA != 'undefined'){
+    document.getElementById('click').style.display = ''
+    document.getElementById('loader').style.display = 'none'
+  }
+}, 1500);
+</script>
+
+<iframe src="http://localhost:3000/reciever.html" onload="sendData(this.contentWindow, this.src)"></iframe>
+<iframe src="https://franchise.cloud/app/reciever.html" onload="sendData(this.contentWindow, this.src)"></iframe>

@@ -1,0 +1,125 @@
+.plan {
+    ol, ul {
+        list-style: none;
+    }
+}
+
+.plan-node {
+    text-decoration: none;
+    color: #4d525a;
+    display: inline-block;
+    transition: all 0.1s;
+    position: relative;
+    padding: 6px 10px;
+    background-color: #fff;
+    font-size: 12px;
+    border: 1px solid #dedede;
+    margin-bottom: 4px;
+    border-radius: 3px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+    width: 240px;
+    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.1);
+}
+
+
+.plan ul, .plan li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+
+
+.plan ul li:only-child {
+    padding-top: 0;
+}
+
+
+.plan ul {
+    display: flex;
+    padding-top: 12px;
+    position: relative;
+    margin: auto;
+    transition: all 0.5s;
+    margin-top: -5px;
+}
+
+.plan ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid #c4c4c4;
+    height: 12px;
+    width: 0;
+}
+
+.plan ul li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 12px 3px 0 3px;
+    transition: all 0.5s;
+}
+
+.plan ul li:before, .plan ul li:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 2px solid #c4c4c4;
+    width: 50%;
+    height: 12px;
+}
+
+.plan-node header h4 {
+    font-size: 13px;
+    float: left;
+    font-weight: 600;
+}
+
+.plan-node header .node-duration {
+    float: right;
+    margin-left: 10px;
+    font-size: 13px;
+}
+
+.text-muted, .plan-stats .btn-close {
+    color: #999ea7;
+}
+
+.plan ul li:after {
+    right: auto;
+    left: 50%;
+    border-left: 2px solid #c4c4c4;
+}
+
+.plan ul li:first-child::before, .plan ul li:last-child::after {
+    border: 0 none;
+}
+
+.plan ul li:last-child::before {
+    border-right: 2px solid #c4c4c4;
+    border-radius: 0 6px 0 0;
+}
+
+.plan ul li:first-child::after {
+    border-radius: 6px 0 0 0;
+}
+
+.plan ul li:before, .plan ul li:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 2px solid #c4c4c4;
+    width: 50%;
+    height: 12px;
+}
+
