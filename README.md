@@ -22,7 +22,7 @@ Otherwise, here's how to build this project:
 1. **Open up a terminal and run**
 
     ```bash
-    git clone https://github.com/HVF/franchise.git
+    git clone --depth 1 https://github.com/HVF/franchise.git
     ```
 
 2. **cd into the project directory**
