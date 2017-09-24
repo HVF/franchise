@@ -165,7 +165,7 @@ class MapVisualizer extends React.Component {
 
   static test(result){
     return result.columns.some(k => ['lat', 'latitude', 'lattitude'].includes(k.toLowerCase())) &&
-           result.columns.some(k => ['lon', 'longitude', 'long'].includes(k.toLowerCase()))
+           result.columns.some(k => ['lon', 'longitude', 'long', 'lng'].includes(k.toLowerCase()))
   }
 
   state = { loaded: false }
@@ -195,7 +195,7 @@ class MapVisualizer extends React.Component {
     let { result, view } = this.props;
 
     const latName = result.columns.find(k => ['lat', 'latitude', 'lattitude'].includes(k.toLowerCase()))
-    const lonName = result.columns.find(k => ['lon', 'longitude', 'long'].includes(k.toLowerCase()))
+    const lonName = result.columns.find(k => ['lon', 'longitude', 'long', 'lng'].includes(k.toLowerCase()))
 
     function posFromDatum(datum){
       let lat = datum[latName] || 0;
