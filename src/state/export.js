@@ -116,12 +116,12 @@ async function makeURL(withCredentials, title){
     ]))
 }
 
+
 async function downloadNotebook(withCredentials){
     let extension = 'html'
     let default_name = (new Date).toISOString().slice(0, 10) + (withCredentials ? '-Credentialed' : '');
 
     const a = document.createElement('a')
-    a.target = '_blank'
     a.style.position = 'absolute'
     a.style.top = '-10000px'
     a.style.left = '-10000px'
@@ -135,8 +135,9 @@ async function downloadNotebook(withCredentials){
             title: 'Export Notebook' + (withCredentials ? ' (with credentials)' : ''),
             inputPlaceholder: default_name
         }) || default_name)
-        a.download = title.match(/.+\..+/) ? title : title + '.' + extension
-        a.href = await makeURL(withCredentials, title)
+
+        a.setAttribute('download', title.match(/.+\..+/) ? title : title + '.' + extension)
+        a.setAttribute('href', await makeURL(withCredentials, title))
         a.click()      
 
         requestAnimationFrame(e => a.remove())
