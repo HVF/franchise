@@ -1,5 +1,13 @@
+
+<p align="center">
+  <a href="https://franchise.cloud/app">
+    <img src="https://i.imgur.com/RmMphMl.png" width='270'/>
+  </a>
+</p>
+
 # Franchise
 *a sql notebook*
+
 
 Franchise is a lightweight but powerful SQL tool with a notebook interface. You can use it online at [franchise.cloud](https://franchise.cloud).
 
@@ -12,10 +20,10 @@ Franchise is a lightweight but powerful SQL tool with a notebook interface. You 
 - Compare queries side by side
     - With our [unique notebook layout engine](https://github.com/antimatter15/breadloaf), you can drag and drop cells on the same line to compare views.
     
-# Running Locally
-There's an online version of franchise [right here](https://franchise.cloud).
+# Running Locally (Development Mode)
+There's an online version of franchise [right here](https://franchise.cloud). There are also instructions for building franchise to static files [here](https://github.com/HVF/franchise/blob/master/DEPLOYING_LOCALLY.md).
 
-Otherwise, here's how to build this project:
+Otherwise, here's how to run franchise in development mode:
 
 0. **If you don't have `npm` or `yarn`, install** [yarn](https://yarnpkg.com/en/docs/install).
 
