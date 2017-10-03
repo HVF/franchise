@@ -89,7 +89,7 @@ export async function sendRequest(query) {
 }
 
 export function reference(name) {
-  return '#' + name;
+  return '{{' + name + '}}';
 }
 
 async function getSchema() {
