@@ -111,7 +111,7 @@ export function FranchiseClientConnector({ connect }){
         <div className='pt-callout pt-intent-warning'>
             <h5>Connect the Database Bridge</h5>
 
-            <div>Run <code>npx franchise-client@0.2.4</code> in your terminal to start the franchise database bridge. 
+            <div>Run <code>npx franchise-client@0.2.7</code> in your terminal to start the franchise database bridge. 
             </div>
             <div>
             If the npx command is not found, <a href="https://nodejs.org/en/download/current/">install the latest version of node</a> and try again.
