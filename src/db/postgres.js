@@ -34,18 +34,6 @@ import { connectHelper, disconnectHelper, extractEditableColumns, assignSuggeste
 export { getStagingValue, assembleDeltaQuery, updateStagingValue, create_table_snippet, select_table_snippet } from './generic'
 
 export class Configure extends React.Component {
-
-  // softUpdateCredentials(o){
-  //   const {credentials} = this.state
-  //   Object.keys(credentials).forEach(k => {
-  //     const credential = credentials[k]
-  //     if(credential.length > 0) o[k] = credential
-  //   })
-  //   console.log(o)
-  //   this.setState({credentials: o})
-  //   // this.setState({fields: {...this.state.fields, ...o}})
-  // }
-
   render(){
     // <p>Tried to connect {this.state.tries} times.</p>
     const {connect, config} = this.props;
@@ -120,15 +108,25 @@ export class Configure extends React.Component {
 
 
 async function getSchema(){
-  var table_list = await sendRequest({
-      action: 'exec',
-      sql: `SELECT table_schema, table_name, column_name
-            FROM information_schema.columns 
-            WHERE table_schema not in ('pg_catalog', 'information_schema', 'pg_internal')`
-  })
-  if(table_list.results.rows.length < 1) return [];
+  let page_size = 9997; // must be < 10,000 so we stay under the 10,000 row limit
+  let schema_rows = [];
+  let cur_offset = 0;
+  do {
+    var page_results = await sendRequest({
+        action: 'exec',
+        sql: `SELECT table_schema, table_name, column_name
+              FROM information_schema.columns 
+              WHERE table_schema not in ('pg_catalog', 'information_schema', 'pg_internal')
+              LIMIT ${page_size} OFFSET ${cur_offset}`
+    })
+    cur_offset += page_size;
+    schema_rows = schema_rows.concat(page_results.results.rows);
+    // console.log(page_results.results.rows)
+  } while (page_results.results.rows.length === page_size);
+  
+  if(schema_rows.length < 1) return [];
 
-  return _.map(_.groupBy(table_list.results.rows, 
+  return _.map(_.groupBy(schema_rows, 
     ([schema, table, column]) => schema + '.' + table), 
     columns => ({
       schema: columns[0][0],
