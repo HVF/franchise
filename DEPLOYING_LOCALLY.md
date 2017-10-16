@@ -36,6 +36,7 @@ Otherwise...
     Use the http server of your choice to serve the contents of the `/bundle` directory. Using python, you might write:
     
     ```bash
+    cd bundle
     python -m SimpleHTTPServer
     ```
 
