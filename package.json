@@ -26,7 +26,6 @@
     "classnames": "^2.2.5",
     "codemirror": "^5.28.0",
     "d3-shape": "^1.2.0",
-    "electron": "^1.6.11",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
     "leaflet": "^1.1.0",
@@ -56,6 +55,7 @@
   },
   "devDependencies": {
     "babel": "^6.23.0",
+    "electron": "^1.7.9",
     "electron-builder": "^19.6.3",
     "gh-pages": "^1.0.0",
     "nwb": "^0.18.10",
