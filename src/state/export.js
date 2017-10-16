@@ -68,6 +68,7 @@ async function dumpApplicationState(withCredentials, includeDump){
         version: 2
     }
 
+
     if(withCredentials && includeDump && getDB().exportData){
         let db_data = await getDB().exportData();
         dump.databaseDump = db_data;
@@ -105,7 +106,7 @@ async function updateAutosave(){
 }
 
 async function makeURL(withCredentials, title){
-    let data = dumpApplicationState(withCredentials, true);
+    let data = await dumpApplicationState(withCredentials, true);
 
     var bin_data = JSON.stringify(JSON.stringify(data));
     var basename = location.protocol + '//' + location.host + location.pathname;

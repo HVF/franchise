@@ -35,7 +35,7 @@
     tether "^1.4"
     tslib "^1.5.0"
 
-"@blueprintjs/core@^1.22.0":
+"@blueprintjs/core@~1.22.0":
   version "1.22.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-1.22.0.tgz#5da642fcc4d614d90c1b0f1864b30e3da9c08a9f"
   dependencies:
@@ -48,7 +48,7 @@
     tether "^1.4"
     tslib "^1.5.0"
 
-"@blueprintjs/labs@^0.5.0":
+"@blueprintjs/labs@~0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/labs/-/labs-0.5.0.tgz#2acd5bb1624e311374e1a81b4717aabe1a15f404"
   dependencies:
@@ -57,7 +57,7 @@
     pure-render-decorator "1.2.1"
     tslib "^1.5.0"
 
-"@blueprintjs/table@^1.18.0", "@blueprintjs/table@^1.19.0":
+"@blueprintjs/table@^1.18.0", "@blueprintjs/table@~1.19.0":
   version "1.19.0"
   resolved "https://registry.yarnpkg.com/@blueprintjs/table/-/table-1.19.0.tgz#5808cd4e5b8ca1f8b561a456a7a51bfd00dfb6f4"
   dependencies:
