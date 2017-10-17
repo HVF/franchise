@@ -26,6 +26,19 @@ const drop = e => {
     connectDB(e.dataTransfer)
 }
 
+const _ACCEPT_FT = [
+    'sql', 'json', 'jsonl', 'sqlite', 'db',
+    "xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123", "wb*", "wq*", "html", "htm"
+].map(function(x) { return "." + x; }).join(",");
+const _ACCEPT_MT = [
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'text/csv',
+    'text/sql', 'application/sql',
+    'application/json'
+].join(",");
+const _ACCEPT = [_ACCEPT_FT, _ACCEPT_MT].join(",");
+
 // SQLite370.svg
 
 export class Configure extends Component{
@@ -40,16 +53,16 @@ export class Configure extends Component{
         return <div>
             <img src={require('../img/sqlite.svg')} style={{ height: 40 }} />
             <p>
-                Franchise includes an in-browser version of the powerful SQLite engine. 
+                Franchise includes an in-browser version of the powerful SQLite engine.
             </p>
 
             <input style={{
                 position: 'absolute',
                 top: -10000,
                 left: -10000
-            }} 
-            accept='.sql,.csv,.json,.jsonl,.xlsx,.xls,.sqlite,.db,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv,application/json'
-            type="file" ref={e => this.picker = e} onChange={e => connectDB(e.target)} /> 
+            }}
+            accept={_ACCEPT}
+            type="file" ref={e => this.picker = e} onChange={e => connectDB(e.target)} />
 
             {connect.status == 'connected' ? <div>
 
@@ -63,7 +76,7 @@ export class Configure extends Component{
                 </p>
                 <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                     <div className="open-thumb" onClick={e => this.picker.click()} style={{ flexShrink: 0 }}>
-                        <i className="fa fa-3x fa-folder-open" aria-hidden="true"></i> 
+                        <i className="fa fa-3x fa-folder-open" aria-hidden="true"></i>
                         <div style={{ display: 'inline-block', width: 70, marginLeft: 10 }}>Browse Data File</div>
                     </div>
                     <div style={{ flexGrow: 1 }}> or create a <a href="javascript:void(0)" onClick={e => connectDB()}>blank notebook</a> </div>
@@ -91,7 +104,7 @@ export class Configure extends Component{
                     </a>
                 </div>
             </div>}
-            
+
 
 
         </div>
@@ -112,21 +125,21 @@ export class Configure extends Component{
 //             <p>
 //                 Play around with SQLite by importing a sqlite, sql, csv, or xslx file.
 //             </p>
-            
+
 //             <label className="pt-label">
 //                     Import file {" "}
 //                     <span className="pt-text-muted">(optional)</span>
 //                     <div className="pt-input-group">
 //                 <label className="pt-file-upload">
-//                     <input type="file" disabled={connect.status == 'connecting' || connect.status == 'connected'} onChange={e => connectDB(e.target)} /> 
+//                     <input type="file" disabled={connect.status == 'connecting' || connect.status == 'connected'} onChange={e => connectDB(e.target)} />
 //                     <span className="pt-file-upload-input">Choose file...</span>
 //                 </label>
 //                 </div>
 //             </label>
 
 //             <p>
-//             { connect.status != 'connected' ? 
-//                 (connect.status == 'connecting' ? 
+//             { connect.status != 'connected' ?
+//                 (connect.status == 'connecting' ?
 //                     <button disabled type="button" className="pt-button pt-large  pt-intent-primary" onClick={e => connectDB()}>
 //                         Connect
 //                         <span className="pt-icon-standard pt-icon-arrow-right pt-align-right"></span>
@@ -185,7 +198,7 @@ export async function connectDB(picker, name){
         if(!name && picker && picker.files){
             name = picker.files[0] && picker.files[0].name.replace(/\..*?$/, '')
         }
-        
+
         let file = await readFile(picker);
 
         if(file && file.byteLength && file.byteLength > 10000000){
@@ -195,11 +208,11 @@ export async function connectDB(picker, name){
                 type: 'error',
             })
         }
-        // const DATA = 
+        // const DATA =
         console.log(file)
 
         let sqlite = await makeSqlite(file, name);
-        
+
         State.apply('connect', '_sqlite', U.replace(sqlite))
         State.apply('connect', 'schema', U.replace(await getSchema()))
     })
@@ -208,7 +221,7 @@ export async function connectDB(picker, name){
 async function disconnectDB(){
     await disconnectHelper(async function(){
         let sqlite = State.get('connect')._sqlite;
-        if(sqlite && sqlite.worker){ sqlite.worker.terminate() }    
+        if(sqlite && sqlite.worker){ sqlite.worker.terminate() }
     })
 }
 
@@ -234,8 +247,8 @@ async function getSchema(){
 
     return table_list.results[0].values.map(([name, sql]) => {
         let ast = SQLParser(sql)
-        return { 
-            name: name, 
+        return {
+            name: name,
             columns: ast.statement[0].definition.filter(k => k.variant == 'column').map(k => k.name)
         }
     })
@@ -279,7 +292,7 @@ async function _runQueryFixSQLite(query){
                     }
                 }
                 result = { values: [], columns: columns }
-            }  
+            }
         }
     }
     result.id = response.id;
@@ -289,7 +302,7 @@ async function _runQueryFixSQLite(query){
 
 // https://sqlite.org/lang.html
 async function makeSqlite(buffer, sname){
-    var worker = new SQLiteWorker(); 
+    var worker = new SQLiteWorker();
     var replyQueue = [], rejectQueue = [];
     var messageCounter = 0;
     worker.onmessage = function(event) {
@@ -308,7 +321,7 @@ async function makeSqlite(buffer, sname){
             worker.postMessage(packet)
         })
     }
-    var startup = await runCommandCore({ 
+    var startup = await runCommandCore({
         action: 'open',
         buffer,
         sname
@@ -336,7 +349,7 @@ export function escapeIdentifier(id){
 export function assembleRowPredicate(result, rowIndex){
     return _.zip(result.editableColumns, result.values[rowIndex])
         .filter(k => k[0]) // for editable (non-computed) columns
-        .map(([col, val]) => escapeIdentifier(col) + 
+        .map(([col, val]) => escapeIdentifier(col) +
             // in SQL, you can't do x = NULL, but instead you have to do x IS NULL
             (val === null ? ' IS NULL' : (' = ' + escapeValue(val) )))
         .join(' AND ')
@@ -370,7 +383,7 @@ export function Clippy(props){
             <CV mode="text/x-sqlite" code={`CREATE TEMP TABLE [IF NOT EXISTS] cohort AS [select statement]`}/>
             </section>
 
-            
+
             <section>
             <h2>Links</h2>
             <ul>
@@ -381,7 +394,7 @@ export function Clippy(props){
             </section>
 
         </div>
-    </div> 
+    </div>
 }
 
 
@@ -458,7 +471,7 @@ export function Clippy(props){
 //                 <CV mode="text/x-sqlite" code={`CREATE TEMP TABLE [IF NOT EXISTS] cohort AS [select statement]`}/>
 //                 </section>
 
-                
+
 //                 <section>
 //                 <h2>Links</h2>
 //                 <ul>
@@ -469,7 +482,7 @@ export function Clippy(props){
 //                 </section>
 
 //             </div>
-//         </div> 
+//         </div>
 
 //     }
 // }
