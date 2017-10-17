@@ -51,7 +51,7 @@
     "url-loader": "^0.5.9",
     "whatwg-fetch": "^2.0.3",
     "worker-loader": "^0.8.1",
-    "xlsx": "^0.10.8"
+    "xlsx": "^0.11.6"
   },
   "devDependencies": {
     "babel": "^6.23.0",

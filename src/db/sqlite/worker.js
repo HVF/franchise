@@ -1,4 +1,3 @@
-import CSF from './csf'
 import SQL from 'sql.js'
 import XLSX from 'xlsx'
 
@@ -38,7 +37,7 @@ if (typeof importScripts === 'function') {
             try {
               json_list = JSON.parse(str)
             } catch (err) { errors.push(err) }
-            
+
           }else if(str.match(/\s*\{/)){
             // JSONM
             var tmp_list = []
@@ -83,20 +82,17 @@ if (typeof importScripts === 'function') {
               console.log("Failed attempt to interpet as SQL: " + err);
               not_sql = true;
             }
-            
+
             if(not_sql){
-              var wb = XLSX.read(str, { type: 'binary' })
-              wb.SheetNames.forEach(function(s) { 
+              var wb = XLSX.read(str, { type: 'binary', cellDates:true });
+              wb.SheetNames.forEach(function(s) {
                 var sname = wb.SheetNames.length > 1
                   ? s
                   : (data['sname'] || s)
-                prepforsexql(wb.Sheets[s], sname, function(stmt){
-                  db.exec(stmt);
-                }); 
+                prepforsexql(wb.Sheets[s], sname, db);
               });
             }
 
-            
           }
         }
 
@@ -173,56 +169,65 @@ function Uint8ArrayToString(data){
 
 // based on sheetjs.com/sexql/
 
-
-function prepforsexql(ws, sname, prepstmt) {
-  // console.log(ws)
-
+function log_and_exec(db, query) {
+  console.log(query);
+  try { db.exec(query); } catch(e) { console.error(e); }
+}
+function prepforsexql(ws, sname, db) {
+  /* Get sheet range */
   if(!ws || !ws['!ref']) return;
-  var range = CSF.utils.decode_range(ws['!ref']);
+  var range = XLSX.utils.decode_range(ws['!ref']);
   if(!range || !range.s || !range.e || range.s > range.e) return;
-  global.CSF = CSF;
+  var R = range.s.r, C = range.s.c;
 
-  console.log(range)
-  /* resolve types */
+  /* Generate headers */
+  var names = new Array(range.e.c-range.s.c+1);
+  for(C = range.s.c; C<= range.e.c; ++C){
+    var addr = XLSX.utils.encode_cell({c:C,r:R});
+    names[C-range.s.c] = ws[addr] ? ws[addr].v : XLSX.utils.encode_col(C);
+  }
+  /* De-duplicate headers */
+  for(var i = 0; i < names.length; ++i) if(names.indexOf(names[i]) < i)
+    for(var j = 0; j < names.length; ++j) {
+      var _name = names[i] + "_" + (j+1);
+      if(names.indexOf(_name) > -1) continue;
+      names[i] = _name;
+    }
+
+  /* Guess column types */
   var types = new Array(range.e.c-range.s.c+1);
-  var names = new Array(range.e.c-range.s.c+1);  
-  var R = range.s.r;
-  for(var C = range.s.c; C<= range.e.c; ++C){
-    names[C-range.s.c] = (ws[CSF.utils.encode_cell({c:C,r:R})]||{v: CSF.utils.encode_cell({c:C,r:R})}).v;
+  for(C = range.s.c; C<= range.e.c; ++C) {
+    var seen = {}, _type = "";
+    for(R = range.s.r+1; R<= range.e.r; ++R) seen[(ws[XLSX.utils.encode_cell({c:C,r:R})]||{t:"z"}).t] = true;
+    if(seen.s || seen.str) _type = "TEXT";
+    else if(seen.n + seen.b + seen.d + seen.e > 1) _type = "TEXT";
+    else switch(true) {
+      case seen.b:
+      case seen.n: _type = "REAL"; break;
+      case seen.e: _type = "TEXT"; break;
+      case seen.d: _type = "TEXT"; break;
+    }
+    types[C-range.s.c] = _type || "TEXT";
   }
 
-  for(var C = range.s.c; C<= range.e.c; ++C)
-    for(R = range.s.r+1; R<= range.e.r; ++R)
-      switch((ws[CSF.utils.encode_cell({c:C,r:R})]||{}).t) {
-        case 'e': break; /* error type */
-        case 'b': /* boolean -> number */
-        case 'n': if(types[C-range.s.c] !== "TEXT") types[C-range.s.c] = "REAL"; break;
-        case 's': case 'str': types[C-range.s.c] = "TEXT";
-        default: break; /* if the cell doesnt exist */
-      }
-  
-  console.log(names, range, types);
+  /* Create table */
+  log_and_exec(db, "DROP TABLE IF EXISTS `" + sname + "`;" );
+  log_and_exec(db, "CREATE TABLE `" + sname + "` (" + names.map(function(n, i) { return "`" + n + "` " + (types[i]||"TEXT"); }).join(", ") + ");" );
 
-  /* update list */
-  // $buttons.innerHTML += "<h2>`" + sname + "`</h2>"
-  // var ss = ""
-  // names.forEach(function(n) { if(n) ss += "`" + n + "`<br />"; });
-  // $buttons.innerHTML += "<h3>" + ss + "</h3>";
-  /* create table */
-  // prepstmt("CREATE TABLE `" + sname + "` (" + names.map(function(n, i) { return "`" + n + "` " + (types[i]||"TEXT"); }).join(", ") + ");" );
-  prepstmt("DROP TABLE IF EXISTS `" + sname + "`;" );
-  prepstmt("CREATE TABLE `" + sname + "` (" + names.map(function(n, i) { return "`" + n + "` " + (types[i]||"TEXT"); }).join(", ") + ");" );
-
-  /* insert data */
+  /* Insert data */
   for(R = range.s.r+1; R<= range.e.r; ++R) {
     var fields = [], values = [];
     for(var C = range.s.c; C<= range.e.c; ++C) {
-      var cell = ws[CSF.utils.encode_cell({c:C,r:R})];
+      var cell = ws[XLSX.utils.encode_cell({c:C,r:R})];
       if(!cell) continue;
       fields.push("`" + names[C-range.s.c] + "`");
-      values.push(types[C-range.s.c] === "REAL" ? cell.v : '"' + cell.v.toString().replace(/"/g, '""') + '"');
+      var val = cell.v;
+      switch(types[C-range.s.c]) {
+        case 'REAL': if(cell.t == 'b' || typeof val == 'boolean' ) val = +val; break;
+        default: val = '"' + val.toString().replace(/"/g, '""') + '"';
+      }
+      values.push(val);
     }
-    prepstmt("INSERT INTO `" +sname+ "` (" + fields.join(", ") + ") VALUES (" + values.join(",") + ");");
+    if(fields.length > 0) log_and_exec(db, "INSERT INTO `" +sname+ "` (" + fields.join(", ") + ") VALUES (" + values.join(",") + ");");
   }
-
 }
