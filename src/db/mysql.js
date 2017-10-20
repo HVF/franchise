@@ -73,7 +73,7 @@ export class Configure extends React.Component {
         className='pt-input'
         value={credentials[type]||''}
         onChange={e => State.apply('config', 'mysql', 'credentials', type, U.replace(e.target.value))}
-        placeholder={credentialHints[type]} 
+        placeholder={credentialHints[type]}
         />
     </div>
 
@@ -105,9 +105,9 @@ export class Configure extends React.Component {
           </div>
           {/*<div>derp</div>*/}
         </div>
-    
+
         <FranchiseClientConnector connect={connect} />
-        
+
         { connect.status != 'connected'
         ? <button disabled={connect.status === 'connecting' || connect.bridge_status !== 'connected'}
                   type="button" className="pt-button pt-large  pt-intent-primary" onClick={e => connectDB()}>
@@ -117,7 +117,7 @@ export class Configure extends React.Component {
         : <button type="button" className="pt-button pt-large  pt-intent-danger" onClick={e => disconnectDB()}>
               Disconnect
               <span className="pt-icon-standard pt-icon-offline pt-align-right"></span>
-          </button> }      
+          </button> }
       </div>
     </div>
   }
@@ -130,14 +130,14 @@ async function getSchema(){
         sql: `SELECT table_name, data_type, column_name FROM information_schema.columns WHERE table_schema = database();`
     })
 
-    return _.map(_.groupBy(table_list.results.values, k => k[0]), 
+    return _.map(_.groupBy(table_list.results.values, k => k[0]),
         (cols, table_name) => ({ name: table_name, columns: cols.map(k => k[2]) }) )
 
     // console.log(table_list)
     // var table_list = await sendRequest({
     //     action: 'exec',
     //     sql: `SELECT DISTINCT table_schema, table_name, string_agg(column_name, '<<comma>>') AS cols
-    //           FROM information_schema.columns 
+    //           FROM information_schema.columns
     //           WHERE table_schema not in ('pg_catalog', 'information_schema')
     //           GROUP BY table_schema, table_name;`
     // })
@@ -196,7 +196,7 @@ export function reference(name){
 
 export function bridgeDisconnected(){
     if(State.get('connect', 'status') === 'connected'){
-      State.apply('connect', 'status', U.replace('disconnected'))  
+      State.apply('connect', 'status', U.replace('disconnected'))
       console.log('bridge disconnected')
     }
 }
@@ -219,7 +219,7 @@ export function escapeIdentifier(id, type){
 export function assembleRowPredicate(result, rowIndex){
     return _.zip(result.editableColumns, result.values[rowIndex])
         .filter(k => k[0]) // for editable (non-computed) columns
-        .map(([col, val]) => escapeIdentifier(col, typeof val) + 
+        .map(([col, val]) => escapeIdentifier(col, typeof val) +
             // in SQL, you can't do x = NULL, but instead you have to do x IS NULL
             (val === null ? ' IS NULL' : (' = ' + escapeValue(val) )))
         .join(' AND ')
@@ -251,7 +251,7 @@ export function Clippy(props){
             <CV mode="text/x-sqlite" code={`CREATE TEMP TABLE [IF NOT EXISTS] cohort AS [select statement]`}/>
             </section>
 
-            
+
             <section>
             <h2>Links</h2>
             <ul>
@@ -262,6 +262,5 @@ export function Clippy(props){
             </section>
 
         </div>
-    </div> 
+    </div>
 }
-
