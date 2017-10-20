@@ -68,7 +68,7 @@ export class Configure extends React.Component {
     const Field = (type, icon, className='') => <div className='pt-input-group'>
       {icon ? <span className={className+' pt-icon pt-icon-'+icon}/> : null }
       <input
-        type='text'
+        type={type === 'password' ? 'password' : 'text'}
         disabled={connect.status == 'connected' || connect.status === 'connecting'}
         className='pt-input'
         value={credentials[type]||''}
