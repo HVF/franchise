@@ -12,8 +12,14 @@ export const name = 'CARTO'
 export const syntax = 'text/x-pgsql'
 
 import { connectHelper, expandQueryRefs, extractEditableColumns, assignSuggestedName } from './generic'
-export { getStagingValue, updateStagingValue, create_table_snippet, select_table_snippet } from './generic'
+export { getStagingValue, updateStagingValue, select_table_snippet } from './generic'
 
+export function create_table_snippet(){
+    return `DROP TABLE IF EXISTS new_table;
+CREATE TABLE new_table (id integer, name text);
+SELECT CDB_CartoDBFyTable('your_user_name','new_table');
+INSERT INTO new_table (cartodb_id, the_geom, id, name) VALUES (1, st_geometryfromtext('POINT(0 0)', 4326), 1, 'WOW')`;
+}
 
 export class Configure extends React.Component {
   render() {
@@ -93,7 +99,12 @@ export function reference(name) {
 }
 
 async function getSchema() {
-  var table_list = await sendRequest("SELECT table_schema, table_name, column_name FROM information_schema.columns WHERE table_schema = '" + State.get('config', 'carto', 'credentials', 'user') + "' and table_name not like 'analysis_%25'");
+  var table_list = undefined;
+  try {
+    table_list = await sendRequest("SELECT table_schema, table_name, column_name FROM information_schema.columns WHERE table_schema = '" + State.get('config', 'carto', 'credentials', 'user') + "' and table_name not like 'analysis_%25'");
+  } catch (exception) {
+
+  }
 
   if (!(table_list && table_list.rows && table_list.rows.length > 0)) {
     return [];
@@ -114,6 +125,7 @@ export async function run(query, cellId) {
   let result = await _runQuery(expandedQuery);
 
   result.query = query;
+  result.expandedQuery = expandedQuery;
 
   State.apply('connect', 'schema', U.replace(await getSchema()));
 
@@ -125,6 +137,11 @@ export async function run(query, cellId) {
 
 async function _runQuery(query) {
   var response = await sendRequest(query);
+
+  if (response.error) {
+    throw new Error(response.error);
+  }
+
   let columns = Object.keys(response.fields);
   let values = [];
 
@@ -138,14 +155,17 @@ async function _runQuery(query) {
   let result = {
     columns,
     values: values,
-    id: response.id
+    id: response.id,
+    time: response.time
   };
 
   result.astInput = query;
   try {
     result.ast = SQLParser(query);
   } catch (err) {
-    throw new Error(err);
+    if (!result.values.length) {
+      throw new Error(err);
+    }
   }
 
   return result;
@@ -181,34 +201,62 @@ export function Clippy(props){
         <div className="clippy">
             <section>
                 <h2>SELECT Statement</h2>
-                <CV mode="text/x-pgsql" code={`SELECT name, favorite_color FROM students WHERE age < 7`}/>
-                <CV mode="text/x-pgsql" code={`SELECT date, price FROM ethereum_chart ORDER BY date DESC`}/>
+                <CV mode="text/x-pgsql" code={`SELECT * FROM "builder-demo".sf_trees WHERE caretaker = 'DPW'`}/>
+                <CV mode="text/x-pgsql" code={`SELECT * FROM "builder-demo".world_commerce WHERE exports_total > 64367776220`}/>
             </section>
 
             <section>
-            <h2>JOINs</h2>
-            <CV mode="text/x-pgsql" code={`SELECT order_table.order_id, customer_table.customer_name, order_table.order_date FROM order_table INNER JOIN customer_table ON order_table.customer_id = customer_table.customer_id`}/>
+            <h2>SPATIAL</h2>
+            <CV mode="text/x-pgsql" code={`SELECT cartodb_id,
+       st_centroid(the_geom) AS the_geom,
+       st_centroid(the_geom_webmercator) AS the_geom_webmercator
+       FROM "builder-demo".world_commerce`}/>
             </section>
 
             <section>
-            <h2>GROUP BY</h2>
-            <CV mode="text/x-pgsql" code={`SELECT product, COUNT(*) AS sales FROM purchases GROUP BY product`}/>
-            <CV mode="text/x-pgsql" code={`SELECT dept, SUM(salary) FROM employees GROUP BY dept`} />
+            <h2>GEOCODING</h2>
+            <CV mode="text/x-pgsql" code={`WITH polygon AS
+  (SELECT cdb_geocode_admin0_polygon('USA') AS the_geom)
+SELECT the_geom,
+       st_transform(the_geom, 3857) AS the_geom_webmercator
+       FROM polygon`}/>
+            <CV mode="text/x-pgsql" code={`WITH A AS
+  (SELECT cdb_geocode_namedplace_point('Madrid') AS the_geom)
+SELECT the_geom,
+       st_transform(the_geom, 3857) AS the_geom_webmercator
+FROM A`} />
             </section>
 
 
             <section>
-            <h2>Temporary Tables</h2>
-            <CV mode="text/x-pgsql" code={`CREATE TEMP TABLE [IF NOT EXISTS] cohort AS [select statement]`}/>
+            <h2>ISODISTANCE</h2>
+            <CV mode="text/x-pgsql" code={`WITH isodistance AS
+  (SELECT the_geom
+   FROM cdb_isodistance('POINT(-3.70568 40.42028)'::geometry, 'walk', ARRAY[300, 600, 900]::integer[]))
+SELECT st_transform(the_geom, 3857) AS the_geom_webmercator,
+       the_geom
+       FROM isodistance`}/>
             </section>
 
+            <section>
+            <h2>ROUTING</h2>
+            <CV mode="text/x-pgsql" code={`WITH route AS
+  (SELECT shape AS the_geom
+   FROM cdb_route_point_to_point('POINT(-3.70237112 40.41706163)'::geometry,'POINT(-3.69909883 40.41236875)'::geometry, 'car', ARRAY['mode_type=shortest']::text[]))
+SELECT st_transform(the_geom, 3857) AS the_geom_webmercator,
+       the_geom
+       FROM route`}/>
+            </section>
 
             <section>
             <h2>Links</h2>
             <ul>
             <li><a target="_blank" href="https://www.postgresql.org/docs/9.4/static/sql.html">PostgreSQL Language Reference</a></li>
-            <li><a target="_blank" href="https://www.postgresql.org/docs/8.3/static/tutorial-agg.html">GROUP BY Tutorial</a></li>
-            <li><a target="_blank" href="https://www.postgresql.org/docs/8.3/static/tutorial-join.html">INNER JOIN Tutorial</a></li>
+            <li><a target="_blank" href="https://postgis.net/docs/reference.html">PostGIS Reference</a></li>
+            <li><a target="_blank" href="https://carto.com/docs/">CARTO Documentation</a></li>
+            <li><a target="_blank" href="https://carto.com/docs/carto-engine/sql-api/">CARTO SQL API</a></li>
+            <li><a target="_blank" href="https://carto.com/docs/carto-engine/dataservices-api/">CARTO Data Services API</a></li>
+            <li><a target="_blank" href="https://carto.com/docs/carto-engine/cartocss/">CARTOCSS Language Reference</a></li>
             </ul>
             </section>
 

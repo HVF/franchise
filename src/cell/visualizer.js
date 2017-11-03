@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 
 import _ from 'lodash';
+import { CartoVisualizer } from './carto'
 import { PivotVisualizer, TableVisualizer, CardVisualizer } from './table'
 import { LineChartVisualizer, BarChartVisualizer, Chart2DVisualizer } from './chart'
 import { Intent, Popover, Position, Switch, Tooltip as BlueprintTooltip } from "@blueprintjs/core";
@@ -13,7 +14,7 @@ import XLSX from 'xlsx'
 import swal from 'sweetalert2'
 
 
-const DownloadButton = ({type, onClick, disabled}) => 
+const DownloadButton = ({type, onClick, disabled}) =>
   <button disabled={disabled} className='pt-button pt-large' onClick={onClick}>
     {type}
     <i className="pt-icon-standard fa fa-download pt-align-right" aria-hidden="true"></i>
@@ -23,7 +24,7 @@ const DownloadButton = ({type, onClick, disabled}) =>
 class DownloadVisualizer extends React.Component {
   static key = 'download-result';
   static desc = "Export Results";
-  static icon = 
+  static icon =
     <i className="fa fa-download" aria-hidden="true"></i>;
 
   static test(result){
@@ -43,7 +44,7 @@ class DownloadVisualizer extends React.Component {
 
       a.download = title.match(/.+\..+/) ? title : title + '.' + extension
       a.href = URL.createObjectURL(new Blob([data], {type}))
-      a.click()      
+      a.click()
     } catch (e) {
       console.log('cancelled download')
     }
@@ -52,7 +53,7 @@ class DownloadVisualizer extends React.Component {
 
   getSheet(){
     const {columns, values} = this.props.result
-    return XLSX.utils.aoa_to_sheet([columns, ...values])    
+    return XLSX.utils.aoa_to_sheet([columns, ...values])
   }
 
   getCSV() {
@@ -97,7 +98,7 @@ class DownloadVisualizer extends React.Component {
       Sheets: {Sheet1: this.getSheet()},
       SheetNames: ['Sheet1']
     }
-     
+
     this.tryDownload(
       s2ab(XLSX.write(wb, {bookType:'xlsx', bookSST: true, type: 'binary'})),
       'application/vnd.ms-excel',
@@ -109,7 +110,7 @@ class DownloadVisualizer extends React.Component {
 
     return <div className='exporter'>
       <TableVisualizer {...this.props} />
-      <div className='buttons-wrap'> 
+      <div className='buttons-wrap'>
         <div className='buttons'>
           <DownloadButton type='CSV' onClick={e => this.getCSV()}/>
           <DownloadButton type='TSV' onClick={e => this.getTSV('\t')}/>
@@ -172,7 +173,7 @@ class MapVisualizer extends React.Component {
 
   componentDidMount(){
     this.loadLibrary()
-    
+
   }
 
   async loadLibrary(){
@@ -205,9 +206,9 @@ class MapVisualizer extends React.Component {
     }
 
     return <div className="map-container">
-      <Map 
+      <Map
           bounds={ result.values.map((k, i) => posFromDatum(_.zipObject(result.columns, k)))  }
-          boundsOptions={{padding: [50, 50]}} 
+          boundsOptions={{padding: [50, 50]}}
           style={{ height: '100%' }}>
           <TileLayer
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -237,7 +238,7 @@ class MapVisualizer extends React.Component {
 class SingleResultVisualizer extends React.Component {
   static key = 'single-result';
   static desc = "Single Result";
-  static icon = 
+  static icon =
       <i className="fa fa-list" aria-hidden="true"></i>;
 
   static test(result){
@@ -256,7 +257,7 @@ class SingleResultVisualizer extends React.Component {
 
 
 
-const Visualizers = [ExplainVisualizer, PivotVisualizer, TableVisualizer, CardVisualizer, LineChartVisualizer, BarChartVisualizer, Chart2DVisualizer, MapVisualizer, DownloadVisualizer]
+const Visualizers = [ExplainVisualizer, PivotVisualizer, TableVisualizer, CardVisualizer, LineChartVisualizer, BarChartVisualizer, Chart2DVisualizer, MapVisualizer, DownloadVisualizer, CartoVisualizer]
 
 
 function NoVisualizer(){
@@ -265,9 +266,9 @@ function NoVisualizer(){
 
 
 function Tooltip(props){
-    return <BlueprintTooltip 
+    return <BlueprintTooltip
         position={Position.RIGHT}
-        tetherOptions={{constraints: [{ attachment: "together", to: "scrollParent" }]}} 
+        tetherOptions={{constraints: [{ attachment: "together", to: "scrollParent" }]}}
         {...props} />
 }
 
@@ -277,7 +278,7 @@ export class ResultVisualizer extends React.Component {
   state = {
     fullscreen: false
   }
-  
+
   shouldComponentUpdate(nextProps, nextState){
     return !_.isEqual(nextProps.result, this.props.result)
         || !_.isEqual(nextState, this.state)
@@ -308,9 +309,9 @@ export class ResultVisualizer extends React.Component {
         <div className={"single-result " + (view.loading ? 'result-loading ' : '')}>
           <i>(query returned no results)</i>
         </div>
-      </div>  
+      </div>
     }
-    
+
 
     var Visualizer = applicable.find(k => k.key == view.selected) || applicable[0] || NoVisualizer;
     let fullscreen = this.state.fullscreen;
@@ -320,14 +321,14 @@ export class ResultVisualizer extends React.Component {
       document.body.style.overflow = ''
     }
 
-    // >React.cloneElement(viz.icon, { 
-    //           key: viz.key, onClick: e => updateView({ selected: viz.key }), 
+    // >React.cloneElement(viz.icon, {
+    //           key: viz.key, onClick: e => updateView({ selected: viz.key }),
     //           className: viz === Visualizer ? 'selected' : ''
     //         }))
     return <div className={"output-wrap " + (fullscreen ? 'fullscreen ' : 'inline ')}>
         <Visualizer result={result} view={view} updateView={updateView} connect={connect} deltas={deltas} config={config}/>
         <div className='controls' onMouseDown={this.props.beginDrag}>
-            {applicable.map(viz => 
+            {applicable.map(viz =>
               <Tooltip key={viz.key} content={viz.desc}>
                 <button  className={viz === Visualizer ? 'selected' : ''} onClick={e => updateView({ selected: viz.key })}>{viz.icon}</button>
               </Tooltip>)
@@ -346,5 +347,5 @@ export class ResultVisualizer extends React.Component {
         </div>
     </div>
   }
-  
+
 }
