@@ -21,11 +21,17 @@ import 'codemirror/addon/edit/closebrackets'
 import 'codemirror/addon/selection/active-line'
 import 'codemirror/addon/search/match-highlighter'
 
+
 import './prediction'
 
 import 'codemirror/addon/hint/show-hint.css'
 import 'codemirror/addon/hint/show-hint'
 import './sql-hint'
+
+import 'codemirror/addon/lint/lint'
+import 'codemirror-graphql/hint';
+import 'codemirror-graphql/lint';
+import 'codemirror-graphql/mode';
 
 import 'codemirror/addon/display/placeholder'
 
@@ -119,8 +125,13 @@ export class Cell extends React.PureComponent {
               refRe: hintRefRe,
 
               tables: _.fromPairs((connect.schema || []).map(k => [k.name, k.columns]).concat(virtualSchema)),
+            } : db.syntax === 'graphql' ? {
+              schema: connect.graphqlschema  
             } : null,
-
+            lint: db.syntax === 'graphql' ? {
+                schema: connect.graphqlschema  
+              } : null,
+            
             keyMap: "sublime",
         }
 
