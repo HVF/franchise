@@ -35,7 +35,7 @@ export class CartoVisualizer extends React.Component {
     static desc = "CARTO View";
     static icon = <svg width="16px" height="16px" viewBox="762 -58 32 32" version="1.1" >
       <g className="imago" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" transform="translate(762.000000, -58.000000)">
-        <circle className="Halo" fill="#ccc" opacity="0.4" cx="16" cy="16" r="16"></circle>
+        <circle className="Halo" fill="#ccc" opacity="0.6" cx="16" cy="16" r="16"></circle>
         <circle className="point" fill="#ccc" cx="16" cy="16" r="5.5"></circle>
       </g>
     </svg>;
