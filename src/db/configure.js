@@ -9,7 +9,6 @@ import { UnmountClosed } from 'react-collapse';
 import * as State from '../state'
 import * as U from '../state/update'
 
-
 import * as SQLiteConnector from './sqlite'
 import * as PostgresConnector from './postgres'
 import * as BigQueryConnector from './bigquery'
@@ -18,6 +17,7 @@ import * as MySQLConnector from './mysql'
 import * as MongoConnector from './mongo'
 
 import * as CartoConnector from './carto'
+import * as GraphQLConnector from './graphql'
 
 const Databases = [
     SQLiteConnector,
@@ -25,16 +25,14 @@ const Databases = [
     MySQLConnector,
     BigQueryConnector,
     CartoConnector,
-    // 'MySQL',
+    GraphQLConnector,
     'MongoDB',
-    // MySQLConnector,
     // MongoConnector,
     'Microsoft SQL Server',
     'Oracle',
     'IBM DB2',
     'Teradata',
 ]
-
 
 export default class Configure extends React.PureComponent {
     render(){
