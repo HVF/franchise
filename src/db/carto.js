@@ -136,6 +136,7 @@ export async function run(query, cellId) {
 }
 
 async function _runQuery(query) {
+  query = preProcess(query);
   var response = await sendRequest(query);
 
   if (response.error) {
@@ -181,6 +182,12 @@ export function escapeIdentifier(id, config){
     return escaped
 }
 
+function preProcess(query) {
+  if (query) {
+    return query.replace(/(?:\r\n|\r|\n)/g, ' ');
+  }
+}
+
 function escapePredicateIdentifier(id, config, numeric){
     const escaped = id.split('.').map(id => '"' + id.replace(/"/g, '""') + '"').join('.');
     if (numeric) return escaped + '::numeric'
@@ -224,7 +231,7 @@ SELECT the_geom,
   (SELECT cdb_geocode_namedplace_point('Madrid') AS the_geom)
 SELECT the_geom,
        st_transform(the_geom, 3857) AS the_geom_webmercator
-FROM A`} />
+       FROM A`} />
             </section>
 
 
