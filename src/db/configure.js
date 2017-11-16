@@ -17,11 +17,14 @@ import * as BigQueryConnector from './bigquery'
 import * as MySQLConnector from './mysql'
 import * as MongoConnector from './mongo'
 
+import * as CartoConnector from './carto'
+
 const Databases = [
-    SQLiteConnector, 
+    SQLiteConnector,
     PostgresConnector,
     MySQLConnector,
     BigQueryConnector,
+    CartoConnector,
     // 'MySQL',
     'MongoDB',
     // MySQLConnector,
@@ -52,8 +55,8 @@ export default class Configure extends React.PureComponent {
                     unconfigured: <div className="body">Connect to a Database</div>
                 }[connect.status]}
                 {!force_open ? <div className="toggle" >
-                    <div>Settings <i 
-                        className={"fa " + (config.open ? 'fa-caret-up' : 'fa-caret-down')} 
+                    <div>Settings <i
+                        className={"fa " + (config.open ? 'fa-caret-up' : 'fa-caret-down')}
                         aria-hidden="true"></i></div>
                 </div> : null}
             </div>
@@ -68,12 +71,12 @@ export default class Configure extends React.PureComponent {
                     Databases.map(c => {
                         if(typeof c == 'string') return <TabPane tab={c} key={c} disabled={true}>{c}</TabPane>;
 
-                        return <TabPane tab={(c === db && connectable) ? 
+                        return <TabPane tab={(c === db && connectable) ?
                                 <span>{c.name} <i className="fa fa-plug" aria-hidden="true"></i></span> :
                                 c.name
                         } key={c.key} disabled={connectable && c !== db}>
-                            { c.Configure ? 
-                                <c.Configure config={config} connect={connect} /> : 
+                            { c.Configure ?
+                                <c.Configure config={config} connect={connect} /> :
                                 <div className="error">No configuration interface defined for {c.name} connector</div> }
                         </TabPane>
                     })
