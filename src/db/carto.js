@@ -89,7 +89,7 @@ export function disconnectDB() {
 }
 
 export async function sendRequest(query) {
-  let response = await fetch('https://' + State.get('config', 'carto', 'credentials', 'user') + '.' + State.get('config', 'carto', 'credentials', 'host') + '/api/v1/sql?q=' + query + '&api_key=' + State.get('config', 'carto', 'credentials', 'apiKey'));
+  let response = await fetch('https://' + State.get('config', 'carto', 'credentials', 'user') + '.' + State.get('config', 'carto', 'credentials', 'host') + '/api/v1/sql?q=' + encodeURIComponent(query) + '&api_key=' + State.get('config', 'carto', 'credentials', 'apiKey'));
 
   return await response.json();
 }
