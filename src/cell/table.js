@@ -12,7 +12,7 @@ import swal from 'sweetalert2'
 export class TableVisualizer extends React.Component {
     static desc = "Table View";
     static key = 'table';
-    static icon = 
+    static icon =
         // <span className="pt-icon-standard pt-icon-th"></span>;
         <i className="fa fa-table" aria-hidden="true"></i>;
 
@@ -24,8 +24,25 @@ export class TableVisualizer extends React.Component {
         let { result, view, deltas, connect, config } = this.props;
         let db = DB(connect.active);
 
+        function utf8bytesToString(arr) {
+            var i, str = '';
+
+            for (i = 0; i < arr.length; i++) {
+                str += '%' + ('0' + arr[i].toString(16)).slice(-2);
+            }
+            str = decodeURIComponent(str);
+            return str;
+        }
+
         function castNull(x){
             if(x === null) return ''
+            if (typeof(x) == 'object' && x.type == "Buffer") {
+                x = utf8bytesToString(x.data);
+                console.log(x);
+            } else {
+                console.log(typeof(x));
+                console.log(x);
+            }
             return x + '';
         }
 
@@ -58,23 +75,23 @@ export class TableVisualizer extends React.Component {
                 </Cell>
             }
             let changed_value = db.getStagingValue(deltas, raw_value, result, rowIndex, colIndex, db, config);
-            return  <EditableCellWrapper 
+            return  <EditableCellWrapper
                 loading={view.loading}
                 value={castNull(changed_value)}
                 intent={changed_value != raw_value ? Intent.WARNING : null}
-                onConfirm={async (value) => 
+                onConfirm={async (value) =>
                     await db.updateStagingValue(value, result, rowIndex, colIndex, config)} />
         }
 
-        return <Table 
-            numRows={result.values.length} 
+        return <Table
+            numRows={result.values.length}
             getCellClipboardData={(row, col) => castNull(result.values[row][col])}
             loadingOptions={
                 view.loading ? [TableLoadingOption.CELLS, TableLoadingOption.COLUMN_HEADERS, TableLoadingOption.ROW_HEADERS] : []
             }>{
-                result.columns.map((name, colIndex) => 
-                    <Column name={name} key={name} 
-                        renderColumnHeader={(colIndex) => 
+                result.columns.map((name, colIndex) =>
+                    <Column name={name} key={name}
+                        renderColumnHeader={(colIndex) =>
                             <ColumnHeaderCell
                                 // renderMenu={isColumnSortable(colIndex) ? ((cellIndex) => <Menu>
                                 //     <MenuItem iconName="sort-asc" onClick={e => {
@@ -83,9 +100,9 @@ export class TableVisualizer extends React.Component {
                                 //         console.log('sort ascending', result)
                                 //     }} text="Sort Asc" />
                                 //     <MenuItem iconName="sort-desc" text="Sort Desc" />
-                                // </Menu>) : null} 
-                                name={result.columns[colIndex]} 
-                                renderName={name => <div className="bp-table-truncated-text"> 
+                                // </Menu>) : null}
+                                name={result.columns[colIndex]}
+                                renderName={name => <div className="bp-table-truncated-text">
                                         {isColumnEditable(colIndex) ? <i className="fa-pencil fa editable-icon" /> : null} {name} </div>}  />}
                         renderCell={renderCell} />)
             }</Table>
@@ -99,7 +116,7 @@ class EditableCellWrapper extends React.Component {
         clearTimeout(this.cancelTimeout)
     }
     render(){
-        return <EditableCell 
+        return <EditableCell
             {...this.props}
             loading={this.state.loading || this.props.loading}
             onCancel={e => {
@@ -116,7 +133,7 @@ class EditableCellWrapper extends React.Component {
 
                     try {
                         await this.props.onConfirm(value, rowIndex, colIndex)
-                    } catch (err) { 
+                    } catch (err) {
                         // immediately invoking swal causes it to be automatically dismissed
                         // when runCell is triggered by Cmd-Enter
                         requestAnimationFrame(_ => swal(
@@ -141,7 +158,7 @@ import { Slider, Button, EditableText } from '@blueprintjs/core'
 export class CardVisualizer extends React.Component {
   static key = 'single-row';
   static desc = "Card View";
-  static icon = 
+  static icon =
     <i className="fa fa-vcard-o" aria-hidden="true"></i>;
 
   state = { page: 0, inserting: false, hideNull: true }
@@ -198,12 +215,12 @@ export class CardVisualizer extends React.Component {
             return <span className="field-value">{stringifyValue(raw_value)}</span>
         }
 
-        return <EditableText 
+        return <EditableText
             multiline
             defaultValue={stringifyValue(changed_value || '')}
             intent={changed_value != raw_value ? Intent.WARNING : null}
             onConfirm={value => {
-                if(value != changed_value) 
+                if(value != changed_value)
                     db.updateStagingValue(value, result, rowIndex, colIndex, config);
             }} />
     }
@@ -212,20 +229,20 @@ export class CardVisualizer extends React.Component {
     // <Switch checked={this.state.hideNull} label="Hide Nulls" onChange={e => this.setState({ hideNull: !this.state.hideNull }) } />
     return <div className={"single-row " + (view.loading ? 'result-loading ' : '')}>
       <div style={{ paddingBottom: 15, padding: 5, display: 'flex' }}>
-        <Slider 
-            disabled={result.values.length < 2 || this.state.inserting}  
-            min={1} max={result.values.length} 
-            value={rowIndex + 1} 
+        <Slider
+            disabled={result.values.length < 2 || this.state.inserting}
+            min={1} max={result.values.length}
+            value={rowIndex + 1}
             labelStepSize={Math.max(1, Math.floor(result.values.length / 10))}
             onChange={e => this.setState({ page: e - 1 })} />
         {insertable ? <div style={{ paddingLeft: 20 }}>
-            <Button 
-                iconName="add" 
-                active={this.state.inserting} 
+            <Button
+                iconName="add"
+                active={this.state.inserting}
                 onClick={e => this.setState({ inserting: !this.state.inserting })}>Insert</Button>
         </div> : null}
-      </div> 
-      
+      </div>
+
       { (this.state.inserting && insertable && connect.schema.find(k => k.name == result.tableName))
         ? <table>
             <tbody>{
@@ -250,9 +267,9 @@ export class CardVisualizer extends React.Component {
 export class PivotVisualizer extends React.Component {
     static key = 'pivot';
     static desc = "Pivot Table";
-    static icon = 
+    static icon =
         <span className="pt-icon-standard pt-icon-pivot-table"></span>;
-    
+
     static test(result){
         if(!result.ast) return false;
         if(!result.ast.statement) return false;
@@ -262,7 +279,7 @@ export class PivotVisualizer extends React.Component {
         if(!stmt.group) return false;
         let grup = stmt.group;
         if(grup.variant != 'list') return false;
-        
+
         const pivotIndices = [];
         result.columns.forEach((r, i) => {
             if(groupAxes.some(k => k.toLowerCase() === r.toLowerCase())) pivotIndices.push(i)
@@ -292,7 +309,7 @@ export class PivotVisualizer extends React.Component {
             index: pivot,
             values: _.uniq(result.values.map(k => k[pivot]))
         }))
-        
+
 
         if(pivotIndices.length != 2){
             return <div className="single-row">
@@ -301,7 +318,7 @@ export class PivotVisualizer extends React.Component {
         }
 
         function getPivotValue(xPivot, yPivot){
-            let match = result.values.find(k => 
+            let match = result.values.find(k =>
                     k[pivotIndices[0].index] === yPivot &&
                     k[pivotIndices[1].index] === xPivot)
             if(match) return valIndices.map(k => {
