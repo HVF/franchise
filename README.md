@@ -59,3 +59,23 @@ Otherwise, here's how to run franchise in development mode:
     When you save your edits, and the browser will automatically reload.
 
 7. (optional) **Add a bunch of great functionality and send a PR!**
+
+# Running in Docker
+
+0. Build a docker image:
+
+```bash
+docker build -t franchise .
+```
+
+1. Run a container with image:
+
+```bash
+docker run \
+    --name franchise \
+    -p 3000:80 \
+    -p 14645:14645 \
+    -d franchise
+```
+
+2. Open up a browser and go to [http://localhost:3000](http://localhost:3000)
