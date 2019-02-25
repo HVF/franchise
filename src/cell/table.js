@@ -38,10 +38,6 @@ export class TableVisualizer extends React.Component {
             if(x === null) return ''
             if (typeof(x) == 'object' && x.type == "Buffer") {
                 x = utf8bytesToString(x.data);
-                console.log(x);
-            } else {
-                console.log(typeof(x));
-                console.log(x);
             }
             return x + '';
         }
