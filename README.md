@@ -79,3 +79,11 @@ docker run \
 ```
 
 2. Open up a browser and go to [http://localhost:3000](http://localhost:3000)
+
+# Build electron app
+
+Linux: ```yarn build:electron:linux```
+
+OC X: ```yarn build:electron:mac```
+
+Windows: ```yarn build:electron:windows```
