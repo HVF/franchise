@@ -142,7 +142,7 @@ function addCSS(url) {
 }
 
 import {latLng, divIcon} from 'leaflet'
-import {Map, Marker, Popup, TileLayer, LayersControl} from 'react-leaflet'
+import {Map, Marker, Popup, TileLayer, LayersControl, LayerGroup, ZoomControl} from 'react-leaflet'
 
 import Leaflet from 'leaflet'
 
@@ -175,6 +175,10 @@ class MapVisualizer extends React.Component {
     addCSS('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.1.0/leaflet.css')
   }
 
+  componentWillMount() {
+    map = null
+  }
+
   posFromDatum(datum) {
     let {result} = this.props
     const latName = result.columns.find(k => ['lat', 'latitude', 'lattitude'].includes(k.toLowerCase()))
@@ -189,10 +193,9 @@ class MapVisualizer extends React.Component {
     const gis2Subdomains = [ 'tile0', 'tile1', 'tile2', 'tile3', 'tile4' ]
     return (
       <LayersControl position="topright">
-        <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite" children>
+        <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
         </LayersControl.BaseLayer>
         <LayersControl.BaseLayer name="OSM Dark">
@@ -268,6 +271,9 @@ class MapVisualizer extends React.Component {
           style={{ height: '100%' }}>
           {this.getLayerControl()}
           {result.values.map((k, i) => this.getMarkers(k, i))}
+          <TileLayer
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
         </Map>
       </div>
     )
@@ -339,7 +345,7 @@ export class ResultVisualizer extends React.Component {
 
   onFullScreen(state) {
     this.setState({ fullscreen: state })
-    if (!isUndefined(map)) map.invalidateSize()
+    if (map) requestAnimationFrame(() => map.leafletElement.invalidateSize())
   }
 
   render() {
