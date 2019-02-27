@@ -8,6 +8,13 @@
 }
 
 
+.table-popup {
+    .table-td {
+        word-wrap: break-word;
+        max-width: 230px;
+    }
+}
+
 
 .result-loading {
     opacity: 0.4;
@@ -58,6 +65,18 @@
     z-index: 100;
     right: 0;
     bottom: 0;
+}
+
+.fullscreen {
+    .map-container {
+        height: 100vh;
+    }
+}
+
+.inline {
+    .map-container {
+        height: 600px;
+    }
 }
 
 
@@ -201,12 +220,6 @@
     overflow: auto;
 }
 
-.map-container {
-    border-top: 1px solid #d7d8da;
-    flex-grow: 1;
-    min-height: 400px;
-}
-
 .slice-wrap {
     width: 0;
     flex: 1;
@@ -245,4 +258,9 @@
 
 .chart {
     -webkit-user-select: none
+}
+
+.leaflet-div-icon {
+    border-radius: 50%;
+    background-color: blue !important;
 }

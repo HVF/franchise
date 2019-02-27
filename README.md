@@ -1,4 +1,3 @@
-
 <p align="center">
   <a href="https://franchise.cloud/app">
     <img src="https://i.imgur.com/RmMphMl.png" width='270'/>
@@ -59,3 +58,61 @@ Otherwise, here's how to run franchise in development mode:
     When you save your edits, and the browser will automatically reload.
 
 7. (optional) **Add a bunch of great functionality and send a PR!**
+
+---
+
+# Running in Docker 🐳
+
+Application will be available here: [http://localhost:3000](http://localhost:3000)
+
+## Using Docker Hub image
+
+```bash
+docker run \
+    --name franchise \
+    -p 3000:80 \
+    -p 14645:14645 \
+    -d binakot/franchise
+```
+
+## Build your own image
+
+0. Build a docker image:
+
+```bash
+docker build -t franchise .
+```
+
+1. Run a container with image:
+
+```bash
+docker run \
+    --name franchise \
+    -p 3000:80 \
+    -p 14645:14645 \
+    -d franchise
+```
+
+---
+
+# Build electron app
+
+Linux: 
+
+```bash
+yarn build:electron:linux
+```
+
+macOS: 
+
+```bash
+yarn build:electron:mac
+```
+
+Windows: 
+
+```bash
+yarn build:electron:windows
+```
+
+After build check out `dist` folder.

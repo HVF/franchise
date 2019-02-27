@@ -12,9 +12,13 @@
     "test:watch": "nwb test-react --server",
     "deploy": "gh-pages -d bundle",
     "pack": "electron-builder --dir",
-    "dist": "yarn build && electron-builder"
+    "dist": "yarn build && electron-builder",
+    "build:electron:linux": "yarn build &&  electron-builder build --linux",
+    "build:electron:mac": "yarn build &&  electron-builder build --mac",
+    "build:electron:windows": "yarn build &&  electron-builder build --windows"
   },
   "dependencies": {
+    "franchise-client": "^0.2.7",
     "@blueprintjs/core": "~1.22.0",
     "@blueprintjs/labs": "~0.5.0",
     "@blueprintjs/table": "~1.19.0",
@@ -28,7 +32,7 @@
     "d3-shape": "^1.2.0",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
-    "leaflet": "^1.1.0",
+    "leaflet": "^1.4.0",
     "lodash": "^4.17.4",
     "mingo": "^1.3.1",
     "normalize.css": "^5.0.0",
@@ -51,12 +55,14 @@
     "url-loader": "^0.5.9",
     "whatwg-fetch": "^2.0.3",
     "worker-loader": "^0.8.1",
-    "xlsx": "^0.11.6"
+    "xlsx": "^0.11.6",
+    "ws": "^6.1.4",
+    "tmp": "^0.0.33"
   },
   "devDependencies": {
     "babel": "^6.23.0",
-    "electron": "^1.7.9",
-    "electron-builder": "^19.6.3",
+    "electron": "^4.0.5",
+    "electron-builder": "^20.38.5",
     "gh-pages": "^1.0.0",
     "nwb": "^0.18.10",
     "nwb-less": "^0.5.1"
