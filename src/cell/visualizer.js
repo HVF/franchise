@@ -14,6 +14,9 @@ import swal from 'sweetalert2'
 
 let map
 
+const googleSubdomains = [ 'mt0', 'mt1', 'mt2', 'mt3' ]
+const gis2Subdomains = [ 'tile0', 'tile1', 'tile2', 'tile3', 'tile4' ]
+
 const DownloadButton = ({type, onClick, disabled}) =>
   <button disabled={disabled} className='pt-button pt-large' onClick={onClick}>
     {type}
@@ -189,11 +192,27 @@ class MapVisualizer extends React.Component {
   }
 
   getLayerControl() {
-    const googleSubdomains = [ 'mt0', 'mt1', 'mt2', 'mt3' ]
-    const gis2Subdomains = [ 'tile0', 'tile1', 'tile2', 'tile3', 'tile4' ]
     return (
       <LayersControl position="topright">
-        <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
+        <LayersControl.BaseLayer name="Google">
+          <TileLayer
+            url='https://{s}.google.com/vt?x={x}&y={y}&z={z}'
+            subdomains={googleSubdomains}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Hybrid">
+          <TileLayer
+            url='https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
+            subdomains={googleSubdomains}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="Google Satellite">
+          <TileLayer
+            url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
+            subdomains={googleSubdomains}
+          />
+        </LayersControl.BaseLayer>
+        <LayersControl.BaseLayer name="OSM">
           <TileLayer
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
@@ -203,28 +222,10 @@ class MapVisualizer extends React.Component {
             url='https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png'
           />
         </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="2 gis">
+        <LayersControl.BaseLayer name="2GIS">
           <TileLayer
             url='https://{s}.maps.2gis.com/tiles?x={x}&y={y}&z={z}&v=1.3&r=g'
             subdomains={gis2Subdomains}
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="google">
-          <TileLayer
-            url='https://{s}.google.com/vt?x={x}&y={y}&z={z}'
-            subdomains={googleSubdomains}
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="google satellite">
-          <TileLayer
-            url='https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}'
-            subdomains={googleSubdomains}
-          />
-        </LayersControl.BaseLayer>
-        <LayersControl.BaseLayer name="google hibride">
-          <TileLayer
-            url='https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}'
-            subdomains={googleSubdomains}
           />
         </LayersControl.BaseLayer>
       </LayersControl>
@@ -243,11 +244,11 @@ class MapVisualizer extends React.Component {
       <Marker position={this.posFromDatum(_.zipObject(result.columns, k))} key={i} icon={this.getMarkerIcon()}>
         <Popup>
           <div>
-            <table className="table table-hover table-striped table-condensed">
+            <table className="table-popup table-hover table-striped table-condensed">
               <tbody>
               {_.map(_.zipObject(result.columns, k), (e, p) => <tr key={p}>
                 <th>{p}</th>
-                <td>{JSON.stringify(e)}</td>
+                <td className="table-td">{JSON.stringify(e)}</td>
               </tr>)}
               </tbody>
             </table>
@@ -272,7 +273,8 @@ class MapVisualizer extends React.Component {
           {this.getLayerControl()}
           {result.values.map((k, i) => this.getMarkers(k, i))}
           <TileLayer
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            url='https://{s}.google.com/vt?x={x}&y={y}&z={z}'
+            subdomains={googleSubdomains}
           />
         </Map>
       </div>
@@ -405,5 +407,4 @@ export class ResultVisualizer extends React.Component {
       </div>
     )
   }
-
 }

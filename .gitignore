@@ -231,3 +231,6 @@ typings/
 # Sonarlint plugin
 
 # End of https://www.gitignore.io/api/web,node,intellij+all,webstorm+all
+
+bundle/
+dist/
