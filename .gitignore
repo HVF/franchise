@@ -234,3 +234,5 @@ typings/
 
 bundle/
 dist/
+
+yarn.lock

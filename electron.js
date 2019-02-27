@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron')
+const { app, Menu, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
 
@@ -34,6 +34,25 @@ function createWindow() {
 
   // Open the DevTools.
   // win.webContents.openDevTools()
+
+	// Create the Application's main menu
+	var template = [{
+		label: "Franchise",
+		submenu: [
+			{ label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+		]}, {
+		label: "Edit",
+		submenu: [
+			{ label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+			{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+			{ type: "separator" },
+			{ label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+			{ label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+			{ label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+			{ label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+		]}
+	];
+	Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -99,7 +118,7 @@ function _asyncToGenerator(fn) {
 
 function startServer() {
   const wss = new WebSocket.Server({port})
-  console.log("franchise-client listening on port", port)
+  console.log("franchise-client listening on port:", port)
   wss.on('connection', ws => {
     console.log('opened connection')
 
