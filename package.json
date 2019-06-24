@@ -1,6 +1,6 @@
 {
   "name": "franchise",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "a sql notebook",
   "private": true,
   "scripts": {
@@ -55,7 +55,7 @@
     "babel": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "electron": "^4.0.5",
-    "electron-builder": "^20.38.5",
+    "electron-builder": "^20.44.4",
     "file-loader": "^0.11.2",
     "gh-pages": "^1.0.0",
     "nwb": "^0.18.10",
@@ -66,7 +66,15 @@
     "url-loader": "^0.5.9",
     "worker-loader": "^0.8.1"
   },
-  "author": "HVF Labs",
+  "build": {
+      "appId": "com.eponymous.franchise",
+      "productName": "Franchise",
+      "copyright": "Copyright © Eponymous Labs, Inc. 2017-2019",
+      "mac": {
+        "category": "your.app.category.type"
+      }
+  },
+  "author": "Eponymous Labs, Inc.",
   "repository": "git@github.com:HVF/franchise.git",
   "main": "electron.js"
 }
