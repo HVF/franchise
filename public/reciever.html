@@ -1,6 +1,14 @@
 <script>
+/*
+ * Franchise exports its state into an HTML file which, when loaded in a web browser,
+ * transfers that data to the Franchise app (without ever uploading anything to a server).
+ * This file makes that possible. It's loaded within an iframe, and recieves the data by
+ * postMessage, stores it in sessionStorage, and then redirects to the final URL. 
+ */
+
 window.addEventListener("message", function(e){
 	sessionStorage.importData = e.data;
+
 	try {
         window.top.location.replace(location.href.replace('reciever.html', ''))
     } catch (err) {

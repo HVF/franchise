@@ -235,4 +235,4 @@ typings/
 bundle/
 dist/
 
-yarn.lock
+.DS_Store
