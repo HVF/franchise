@@ -31,6 +31,7 @@
     "d3-shape": "^1.2.0",
     "font-awesome": "^4.7.0",
     "franchise-client": "^0.2.7",
+    "graphql-docs": "^0.2.0",
     "graphql-request": "^1.4.0",
     "leaflet": "^1.4.0",
     "lodash": "^4.17.4",

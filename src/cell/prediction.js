@@ -49,6 +49,7 @@ CodeMirror.defineExtension("showPrediction", function(options) {
 });
 
 
+
 function onChangeHandler(cm, changes){
     var cur = cm.getCursor()
 
@@ -83,6 +84,7 @@ var cancelAnimationFrame = window.cancelAnimationFrame || clearTimeout;
 var Pos = CodeMirror.Pos;
 function hint(ts, cm, c) {
     ts.request(cm, {type: "completions", types: true, docs: true, urls: true, includeKeywords: true}, function(error, data) {
+
         // if (error) return showError(ts, cm, error);
         var completions = [], after = "";
         var from = data.start, to = data.end;
@@ -91,6 +93,7 @@ function hint(ts, cm, c) {
             after = "\"]";
         for (var i = 0; i < data.completions.length; ++i) {
             var completion = data.completions[i];
+            
             if (data.guess) className += " " + cls + "guess";
             completions.push({text: completion.name + after,
                                                 displayText: completion.name,
@@ -241,6 +244,12 @@ Completion.prototype = {
         if(comtext.length == to.ch - from.ch) return this.close();
 
         if(to.ch != ch) return this.close();
+
+
+        let existingText = cm.getRange(from, to),
+            completionPrefix = prefix.slice(0, to.ch - from.ch);
+
+        if(completionPrefix.toLowerCase() !== existingText.toLowerCase()) return this.close();
 
         var prefixWidget = document.createElement("span")
         prefixWidget.appendChild(document.createTextNode(prefix.slice(to.ch - from.ch)))

@@ -8,6 +8,8 @@ import * as U from '../state/update'
 import { connectHelper, disconnectDB } from './generic'
 
 export { disconnectDB, getStagingValue } from './generic'
+import { GraphQLDocs } from 'graphql-docs'
+
 
 export const key = 'graphql'
 export const name = "GraphQL"
@@ -74,6 +76,7 @@ export async function run(query) {
     result = formatResults(data)
   }
   result.query = query;
+
   State.apply('connect', 'graphqlschema', U.replace(await getSchema()))
   return result;
 }
@@ -95,20 +98,53 @@ const fetcher = ({ query, variables, operationName, context }) => {
 };
 
 const getSchema = async () => {
-  let result = await fetcher({
+  return await fetcher({
       query: graphql.introspectionQuery
     })
-    return graphql.buildClientSchema(result.data)
 }
 
 function formatResults(data) {
-  return {
-    columns: Object.keys(data[0]),
-    values: data.map(d => Object.values(d))
+  if(Array.isArray(data)){
+    return {
+      columns: Object.keys(data[0]),
+      values: data.map(d => Object.values(d))
+    }  
+  }else{
+    console.log({
+      columns: Object.keys(data),
+      values: [Object.values(data)]
+    })
+    return {
+      columns: Object.keys(data),
+      values: [Object.values(data)]
+    }
   }
+  
 }
 
-async function connectDB() {
+
+export const buildGQLSchema = _.memoize(result => {
+  if(!result) return null;
+  return graphql.buildClientSchema(result.data)
+})
+
+
+export function Clippy(props){
+    return <div className="clippy-wrap">
+        <div className="clippy">
+            {props.connect.graphqlschema ? 
+              <GraphQLDocs fetcher={async (query) => {
+                return props.connect.graphqlschema
+              }}></GraphQLDocs> : null}
+
+        </div>
+    </div> 
+}
+
+
+
+
+export async function connectDB() {
   console.log('connectDB started')
   await connectHelper(async function () {
     State.apply('connect', '_db', U.replace(database()))

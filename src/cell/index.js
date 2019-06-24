@@ -43,7 +43,8 @@ import swal from 'sweetalert2'
 
 import { addCell } from '../notebook'
 import { DB, getDB } from '../db/configure'
-// import { ResultVisualizer } from './visualizer'
+import { buildGQLSchema } from '../db/graphql'
+
 import _ from 'lodash'
 
 
@@ -55,6 +56,8 @@ function Tooltip(props){
         tetherOptions={{constraints: [{ attachment: "together", to: "scrollParent" }]}} 
         {...props} />
 }
+
+
 
 export class Cell extends React.PureComponent {
     shouldComponentUpdate(nextProps){
@@ -117,7 +120,7 @@ export class Cell extends React.PureComponent {
             refRe: modeRefRe,
             placeholder: connect.status == 'connected' ? "Type query here, or click a bubble below." : '',
 
-            showPredictions: /sql/i.test(db.syntax) ? true : false,
+            showPredictions: /sql|graphql/i.test(db.syntax) ? true : false,
 
             hintOptions: /sql/i.test(db.syntax) ? {
               hint: CodeMirror.hint.sql,
@@ -126,10 +129,11 @@ export class Cell extends React.PureComponent {
 
               tables: _.fromPairs((connect.schema || []).map(k => [k.name, k.columns]).concat(virtualSchema)),
             } : db.syntax === 'graphql' ? {
-              schema: connect.graphqlschema  
+                hint: CodeMirror.hint.graphql,
+                schema: buildGQLSchema(connect.graphqlschema)
             } : null,
             lint: db.syntax === 'graphql' ? {
-                schema: connect.graphqlschema  
+                schema: buildGQLSchema(connect.graphqlschema)
               } : null,
             
             keyMap: "sublime",
@@ -203,7 +207,7 @@ export class Cell extends React.PureComponent {
                 {md ? null
                 : view.error ? 
                     <div className="error">{view.error}</div> : 
-                    (view.result ? <ResultVisualizerLoader
+                    (view.result ? <ErrorBoundary updateView={updateView}><ResultVisualizerLoader
                         view={view}
                         deltas={deltas}
                         connect={connect}
@@ -211,7 +215,7 @@ export class Cell extends React.PureComponent {
                         config={config}
                         updateView={updateView}
                         beginDrag={this.props.beginDrag} 
-                        result={view.result} /> : null)}
+                        result={view.result} /></ErrorBoundary> : null)}
             </div>
         </div>
     }
@@ -227,6 +231,18 @@ setTimeout(async function(){
         } catch (err) {}
     }
 }, 0)
+
+
+class ErrorBoundary extends React.Component {
+  componentDidCatch(error, info) {
+    this.props.updateView({
+        error: error.toString()
+    })
+  }
+  render() {
+    return this.props.children; 
+  }
+}
 
 class ResultVisualizerLoader extends React.PureComponent {
     componentWillUpdate(){
