@@ -1,7 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import { GraphQLClient } from 'graphql-request'
-import { introspectSchema } from 'graphql-tools'
+import * as graphql from "graphql"
 
 import * as State from '../state'
 import * as U from '../state/update'
@@ -90,11 +90,15 @@ const database = () => {
 
 const fetcher = ({ query, variables, operationName, context }) => {
   const db = State.get('connect', '_db');
+
   return db.request(query, variables).then(data => { return { data } })
 };
 
 const getSchema = async () => {
-  return introspectSchema(fetcher)
+  let result = await fetcher({
+      query: graphql.introspectionQuery
+    })
+    return graphql.buildClientSchema(result.data)
 }
 
 function formatResults(data) {
@@ -111,6 +115,3 @@ async function connectDB() {
     State.apply('connect', 'graphqlschema', U.replace(await getSchema()))
   })
 }
-
-
-

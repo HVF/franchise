@@ -26,14 +26,13 @@
     "chart.js": "^2.8.0",
     "classnames": "^2.2.6",
     "codemirror": "^5.48.0",
+    "codemirror-graphql": "^0.6.11",
     "css-loader": "^3.0.0",
     "d3-shape": "^1.2.0",
     "font-awesome": "^4.7.0",
     "franchise-client": "^0.2.7",
-    "leaflet": "^1.4.0",
-    "codemirror-graphql": "^0.6.11",
     "graphql-request": "^1.4.0",
-    "graphql-tools": "^2.7.2",
+    "leaflet": "^1.4.0",
     "lodash": "^4.17.4",
     "normalize.css": "^5.0.0",
     "rc-tabs": "^7.1.1",
@@ -70,12 +69,12 @@
     "worker-loader": "^0.8.1"
   },
   "build": {
-      "appId": "com.eponymous.franchise",
-      "productName": "Franchise",
-      "copyright": "Copyright © Eponymous Labs, Inc. 2017-2019",
-      "mac": {
-        "category": "your.app.category.type"
-      }
+    "appId": "com.eponymous.franchise",
+    "productName": "Franchise",
+    "copyright": "Copyright © Eponymous Labs, Inc. 2017-2019",
+    "mac": {
+      "category": "your.app.category.type"
+    }
   },
   "author": "Eponymous Labs, Inc.",
   "repository": "git@github.com:HVF/franchise.git",
