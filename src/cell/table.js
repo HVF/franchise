@@ -132,7 +132,7 @@ class EditableCellWrapper extends React.Component {
                     } catch (err) {
                         // immediately invoking swal causes it to be automatically dismissed
                         // when runCell is triggered by Cmd-Enter
-                        requestAnimationFrame(_ => swal(
+                        requestAnimationFrame(_ => swal.fire(
                             'Oops...',
                             err.message,
                             'error'

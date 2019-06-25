@@ -202,7 +202,7 @@ export async function connectDB(picker, name){
         let file = await readFile(picker);
 
         if(file && file.byteLength && file.byteLength > 10000000){
-            await swal({
+            await swal.fire({
                 title: 'Large Files Not Supported',
                 text: 'Currently, the pure-javascript SQLite engine doesn\'t play nicely with large files. Caveat Emptor, Here Be Dragons.',
                 type: 'error',

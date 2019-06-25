@@ -268,7 +268,7 @@ export async function runCell(cellId){
     if(State.get('connect', 'status') !== 'connected'){
         // immediately invoking swal causes it to be automatically dismissed
         // when runCell is triggered by Cmd-Enter
-        requestAnimationFrame(_ => swal(
+        requestAnimationFrame(_ => swal.fire(
             'Oops...',
             "No database connected! Please connect to a database before running queries. ",
             'error'

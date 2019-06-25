@@ -130,7 +130,7 @@ async function downloadNotebook(withCredentials){
     document.body.appendChild(a)
 
     try {
-        const title = (await swal({
+        const title = (await swal.fire({
             input: 'text',
             showCancelButton: true,
             title: 'Export Notebook' + (withCredentials ? ' (with credentials)' : ''),
@@ -144,6 +144,7 @@ async function downloadNotebook(withCredentials){
         requestAnimationFrame(e => a.remove())
     } catch (e) {
         console.log('cancelled download')
+        console.error(e)
     }
 }
 
