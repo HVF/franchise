@@ -7,12 +7,20 @@
  */
 
 window.addEventListener("message", function(e){
-	sessionStorage.importData = e.data;
-
-	try {
-        window.top.location.replace(location.href.replace('reciever.html', ''))
-    } catch (err) {
-        window.top.location = location.href.replace('reciever.html', '')
+    if(typeof e.data === 'string'){
+        sessionStorage.importData = e.data;
+        try {
+            window.top.location.replace(location.href.replace('reciever.html', ''))
+        } catch (err) {
+            window.top.location = location.href.replace('reciever.html', '')
+        }
+    }else if(e.data.action === 'franchise-transfer-data'){
+        sessionStorage.importData = e.data.importData;
+        event.source.postMessage({
+            action: 'franchise-redirect',
+            url: location.href.replace('reciever.html', '')
+        }, '*'); // this can't be event.origin because that is null for file://
     }
+
 }, false);
 </script>

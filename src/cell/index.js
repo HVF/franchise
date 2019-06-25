@@ -21,6 +21,7 @@ import 'codemirror/addon/edit/closebrackets'
 import 'codemirror/addon/selection/active-line'
 import 'codemirror/addon/search/match-highlighter'
 
+
 import './prediction'
 
 import 'codemirror/addon/hint/show-hint.css'
@@ -37,7 +38,7 @@ import swal from 'sweetalert2'
 
 import { addCell } from '../notebook'
 import { DB, getDB } from '../db/configure'
-// import { ResultVisualizer } from './visualizer'
+
 import _ from 'lodash'
 
 
@@ -50,7 +51,9 @@ function Tooltip(props){
         {...props} />
 }
 
-export class Cell extends React.PureComponent {
+
+
+export class Cell extends React.Component {
     shouldComponentUpdate(nextProps){
         return nextProps.view !== this.props.view 
             || nextProps.connect !== this.props.connect
@@ -85,9 +88,8 @@ export class Cell extends React.PureComponent {
         let fresh = ((view.result && view.result.query) || '').trim() === (view.query || '').trim() 
             || view.error || (view.query || '').trim() === '' || view.loading || connect.status != 'connected';
 
-        // let reference = options.referenceFn || (s => '#' + s);
-        let hintRefRe = new RegExp(_.escapeRegExp(db.reference('SPLITTER')).replace('SPLITTER', '\\b(\\w*)\\b'))
-        let modeRefRe = new RegExp('^' + _.escapeRegExp(db.reference('SPLITTER')).replace('SPLITTER', '(\\w*)'))
+
+
 
         const sql_options = {
             mode: db.syntax || 'text/plain',
@@ -107,19 +109,14 @@ export class Cell extends React.PureComponent {
             autoCloseBrackets: true,
             matchBrackets: true,
             addModeClass: true,
-            // referenceFn: db.reference,
-            refRe: modeRefRe,
             placeholder: connect.status == 'connected' ? "Type query here, or click a bubble below." : '',
+            
+            tabSize: 2,
+            indentUnit: 2,
 
-            showPredictions: /sql/i.test(db.syntax) ? true : false,
+            showPredictions: true,
 
-            hintOptions: /sql/i.test(db.syntax) ? {
-              hint: CodeMirror.hint.sql,
-              // referenceFn: db.reference,
-              refRe: hintRefRe,
-
-              tables: _.fromPairs((connect.schema || []).map(k => [k.name, k.columns]).concat(virtualSchema)),
-            } : null,
+            ...(db.CodeMirrorOptions ? db.CodeMirrorOptions(connect, virtualSchema) : {}),
 
             keyMap: "sublime",
         }
@@ -192,7 +189,7 @@ export class Cell extends React.PureComponent {
                 {md ? null
                 : view.error ? 
                     <div className="error">{view.error}</div> : 
-                    (view.result ? <ResultVisualizerLoader
+                    (view.result ? <ErrorBoundary updateView={updateView}><ResultVisualizerLoader
                         view={view}
                         deltas={deltas}
                         connect={connect}
@@ -200,7 +197,7 @@ export class Cell extends React.PureComponent {
                         config={config}
                         updateView={updateView}
                         beginDrag={this.props.beginDrag} 
-                        result={view.result} /> : null)}
+                        result={view.result} /></ErrorBoundary> : null)}
             </div>
         </div>
     }
@@ -216,6 +213,18 @@ setTimeout(async function(){
         } catch (err) {}
     }
 }, 0)
+
+
+class ErrorBoundary extends React.Component {
+  componentDidCatch(error, info) {
+    this.props.updateView({
+        error: error.toString()
+    })
+  }
+  render() {
+    return this.props.children; 
+  }
+}
 
 class ResultVisualizerLoader extends React.PureComponent {
     componentWillUpdate(){
@@ -259,7 +268,7 @@ export async function runCell(cellId){
     if(State.get('connect', 'status') !== 'connected'){
         // immediately invoking swal causes it to be automatically dismissed
         // when runCell is triggered by Cmd-Enter
-        requestAnimationFrame(_ => swal(
+        requestAnimationFrame(_ => swal.fire(
             'Oops...',
             "No database connected! Please connect to a database before running queries. ",
             'error'
@@ -290,7 +299,7 @@ function SnippetWidget({ connect, view, cmr, updateView, config }){
     let db = DB(connect.active);
     var is_empty = (view.query || '').trim() === '';
     
-    if(!connect.schema) return null;
+    // if(!connect.schema) return null;
     if(connect.status !== 'connected') return null;
     if(view.markdown) return null;
     
@@ -324,7 +333,7 @@ function SnippetWidget({ connect, view, cmr, updateView, config }){
         cm.setCursor(1e8, 1e8)
         cm.focus()
     }
-    let visible_schema = connect.schema.filter(k => !(k.schema && k.schema.startsWith('_')) );
+    let visible_schema = connect.schema ? connect.schema.filter(k => !(k.schema && k.schema.startsWith('_')) ) : [];
     
     return <div className={'slice-editor-widget ' + (is_empty ? 'slice-visible' : 'slice-hidden')}>{
         visible_schema.length > 8 ? 
@@ -359,12 +368,12 @@ function SnippetWidget({ connect, view, cmr, updateView, config }){
                 >{table.name}</div>
             </BlueprintTooltip>
         )}
-        <BlueprintTooltip content={"Create Table"} position={Position.BOTTOM} intent={Intent.WARNING}>
+        {db.create_table_snippet && <BlueprintTooltip content={"Create Table"} position={Position.BOTTOM} intent={Intent.WARNING}>
             <div className="token create-table" 
                     onClick={e => replaceText(db.create_table_snippet(connect.schema), true) }>
                     <span className="pt-icon-standard pt-icon-plus"></span>
                 </div>
-        </BlueprintTooltip>
+        </BlueprintTooltip>}
 
         <BlueprintTooltip content={"Convert to Markdown Cell"} position={Position.BOTTOM}>
             <div className="token create-text" 

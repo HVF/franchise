@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { getDB } from './configure'
+import { getDB, DB } from './configure'
 import { addCell, isEmpty, addTrash } from '../notebook'
 import { getCell } from '../cell'
 
@@ -279,4 +279,25 @@ export function select_table_snippet(table){
 }
 
 
+import CodeMirror from 'codemirror'
+
+export function CodeMirrorOptions(connect, virtualSchema){
+    let db = DB(connect.active)
+    let hintRefRe = new RegExp(_.escapeRegExp(db.reference('SPLITTER')).replace('SPLITTER', '\\b(\\w*)\\b'))
+    let modeRefRe = new RegExp('^' + _.escapeRegExp(db.reference('SPLITTER')).replace('SPLITTER', '(\\w*)'))
+
+    return {
+        mode: 'text/x-pgsql',
+        // showPredictions: true,
+        
+        refRe: modeRefRe,
+
+        hintOptions: {
+            hint: CodeMirror.hint.sql,
+            refRe: hintRefRe,
+            tables: _.fromPairs((connect.schema || []).map(k => [k.name, k.columns]).concat(virtualSchema)),
+        }    
+    }
+            
+}
 

@@ -4,7 +4,7 @@ export const key = key => (object, next) => ({ ...object, [key]: next(object[key
 export const safe_key = key => (object, next) => ({ ...object, [key]: next(typeof object != 'undefined' ? object[key] : undefined) });
 
 export const id = id => (array, next) => array.map(k => k.id === id ? next(k) : k);
-export const match = test => (array, next) => array.map(k => test(k) ? next(k) : k);
+export const match = test => (array, next) => array.map((k, i) => test(k, i) ? next(k) : k);
 export const index = index => (array, next) => array.slice(0, index).concat([next(array[index])], array.slice(index + 1));
 
 

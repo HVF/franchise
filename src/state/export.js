@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React from 'react'
 import * as State from '../state'
+import * as U from '../state/update'
 import swal from 'sweetalert2'
 
 import { Tooltip, Position, Popover, Menu, MenuItem } from '@blueprintjs/core';
@@ -114,6 +115,9 @@ async function makeURL(withCredentials, title){
         require('raw-loader!./export_template.html')
             .replace("{{notebook_name}}", title)
             .replace("{{bin_data}}", bin_data)
+            .replace("{{notebook_contents}}", State.getAll("notebook", "layout", U.each, "items", U.each, "query")
+                .join("\n\n========================================================n\n")
+                .replace(/<\/script/g, 'script'))
     ]))
 }
 
@@ -129,21 +133,19 @@ async function downloadNotebook(withCredentials){
 
     document.body.appendChild(a)
 
-    try {
-        const title = (await swal({
-            input: 'text',
-            showCancelButton: true,
-            title: 'Export Notebook' + (withCredentials ? ' (with credentials)' : ''),
-            inputPlaceholder: default_name
-        }) || default_name)
-
+    const prompt = await swal.fire({
+        input: 'text',
+        showCancelButton: true,
+        title: 'Export Notebook' + (withCredentials ? ' (with credentials)' : ''),
+        inputPlaceholder: default_name
+    })
+    if(!prompt.dismiss){
+        let title = prompt.value || default_name
         a.setAttribute('download', title.match(/.+\..+/) ? title : title + '.' + extension)
         a.setAttribute('href', await makeURL(withCredentials, title))
         a.click()      
 
         requestAnimationFrame(e => a.remove())
-    } catch (e) {
-        console.log('cancelled download')
     }
 }
 

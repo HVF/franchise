@@ -38,7 +38,7 @@ class DownloadVisualizer extends React.Component {
     const a = document.createElement('a')
     a.target = '_blank'
     try {
-      const title = (await swal({
+      const title = (await swal.fire({
         input: 'text',
         showCancelButton: true,
         title: 'Save Result As ' + extension.toUpperCase(),

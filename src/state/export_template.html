@@ -4,16 +4,17 @@
  _______  ______ _______ __   _ _______ _     _ _____ _______ _______
  |______ |_____/ |_____| | \  | |       |_____|   |   |______ |______
  |       |    \_ |     | |  \_| |_____  |     | __|__ ______| |______
-                                                                     
- _______  _____                                                      
- |______ |   __| |                                                   
- ______| |____\| |_____                                              
-                                                                     
  __   _  _____  _______ _______ ______   _____   _____  _     _      
  | \  | |     |    |    |______ |_____] |     | |     | |____/       
  |  \_| |_____|    |    |______ |_____] |_____| |_____| |    \_      
                                                                      
--->
+--> <script type="franchise_queries">
+========================================================
+
+{{notebook_contents}}
+
+========================================================
+</script>
 <style>
 body {
   font-family: sans-serif;
@@ -28,8 +29,6 @@ iframe {
 a {
   font-size: large;
 }
-
-
 #click {
   background: #2257d9;
     padding: 20px;
@@ -37,7 +36,6 @@ a {
     text-decoration: none;
     border-radius: 3px;
 }
-
 /*https://projects.lukehaas.me/css-loaders/*/
 .loader,
 .loader:after {
@@ -80,31 +78,30 @@ a {
     transform: rotate(360deg);
   }
 }
-
 </style>
-
 <div class="loader" id="loader">Loading Franchise...</div>
-
 <center><a id="click" style="display:none" href="https://franchise.cloud/app/" target="_blank">Click here to open Franchise SQL Notebook</a></center>
 <script type="text/javascript">
 const DATA = {{bin_data}};
 </script>
-
 <script type="text/javascript">
 function sendData(target, src){
   console.log(src)
   if(typeof DATA != 'undefined'){
-    target.postMessage(DATA, '*')    
+    target.postMessage({
+      importData: DATA,
+      action: 'franchise-transfer-data'
+    }, '*')    
   }
 }
-
 window.addEventListener("message", function(e){
   console.log(e.data)
   if(e.data == 'franchise-request-import'){
     e.source.postMessage({ action: 'franchise-import', data: DATA }, '*')
+  }else if(e.data.action === 'franchise-redirect'){
+    location = e.data.url;
   }
 }, false)
-
 setTimeout(function(){
   if(typeof DATA != 'undefined'){
     document.getElementById('click').style.display = ''
@@ -112,6 +109,5 @@ setTimeout(function(){
   }
 }, 1500);
 </script>
-
 <iframe src="http://localhost:3000/reciever.html" onload="sendData(this.contentWindow, this.src)"></iframe>
 <iframe src="https://franchise.cloud/app/reciever.html" onload="sendData(this.contentWindow, this.src)"></iframe>

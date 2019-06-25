@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React from 'react'
 
 import * as State from '../state'
@@ -12,7 +13,7 @@ export const name = 'CARTO'
 export const syntax = 'text/x-pgsql'
 
 import { connectHelper, expandQueryRefs, extractEditableColumns, assignSuggestedName } from './generic'
-export { getStagingValue, updateStagingValue, select_table_snippet } from './generic'
+export { getStagingValue, updateStagingValue, select_table_snippet, CodeMirrorOptions } from './generic'
 
 export function create_table_snippet(){
     return `DROP TABLE IF EXISTS new_table;
@@ -270,3 +271,4 @@ SELECT st_transform(the_geom, 3857) AS the_geom_webmercator,
         </div>
     </div>
 }
+

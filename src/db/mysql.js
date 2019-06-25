@@ -37,7 +37,7 @@ export async function bridgeConnected(){
 
 import { FranchiseClientConnector, sendRequest, disconnectBridge } from './bridge'
 import { connectHelper, disconnectHelper, extractEditableColumns, assignSuggestedName, expandQueryRefs } from './generic'
-export { getStagingValue, assembleDeltaQuery, updateStagingValue, create_table_snippet, select_table_snippet } from './generic'
+export { getStagingValue, assembleDeltaQuery, updateStagingValue, create_table_snippet, select_table_snippet, CodeMirrorOptions } from './generic'
 
 export class Configure extends React.Component {
 

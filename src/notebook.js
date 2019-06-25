@@ -32,7 +32,6 @@ export default class Notebook extends React.PureComponent {
             footer={[
                 show_button ? <GinormousAddButton key="super-size-me" /> : null,
                 ...trashViewer({ notebook, trash, connect }),
-                // db.Clippy ? <db.Clippy key="clippy" connect={connect}/> : null,
                 <div className="bottom-spacer" key="bottom-spacer" />
             ]} />
     }

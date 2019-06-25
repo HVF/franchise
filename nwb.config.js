@@ -1,4 +1,6 @@
 var StatsPlugin = require("stats-webpack-plugin")
+var webpack = require('webpack')
+
 module.exports = {
     type: 'react-app',
     webpack: {
@@ -11,7 +13,11 @@ module.exports = {
             plugins: [
                 new StatsPlugin('stats.json', {
                     chunkModules: true
-                })
+                }),
+                new webpack.ContextReplacementPlugin(
+                    /graphql-language-service-interface[\\/]dist$/,
+                    new RegExp(`^\\./.*\\.js$`)
+                )
             ],
         },
 

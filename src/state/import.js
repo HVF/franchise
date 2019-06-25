@@ -48,7 +48,6 @@ export function importData(dump){
     State.set(dump.state);
     if(dump.autoconnect){
         let db = getDB();
-        // console.log(db)
         if(db.connectDB){
             db.connectDB(dump.databaseDump)
         }else{
