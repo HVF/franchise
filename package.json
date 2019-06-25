@@ -43,7 +43,6 @@
     "react-error-boundary": "^1.2.5",
     "react-leaflet": "^2.4.0",
     "react-motion": "^0.5.0",
-    "sql-formatter": "^2.0.0",
     "sql.js": "^0.4.0",
     "sqlgenerate": "https://github.com/jdrew1303/sqlgenerate",
     "sqlite-parser": "^1.0.1",
