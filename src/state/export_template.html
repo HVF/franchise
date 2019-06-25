@@ -13,6 +13,12 @@
  | \  | |     |    |    |______ |_____] |     | |     | |____/       
  |  \_| |_____|    |    |______ |_____] |_____| |_____| |    \_      
                                                                      
+
+========================================================
+
+{{notebook_contents}}
+
+
 -->
 <style>
 body {
@@ -94,7 +100,10 @@ const DATA = {{bin_data}};
 function sendData(target, src){
   console.log(src)
   if(typeof DATA != 'undefined'){
-    target.postMessage(DATA, '*')    
+    target.postMessage({
+      importData: DATA,
+      action: 'franchise-transfer-data'
+    }, '*')    
   }
 }
 
@@ -102,6 +111,8 @@ window.addEventListener("message", function(e){
   console.log(e.data)
   if(e.data == 'franchise-request-import'){
     e.source.postMessage({ action: 'franchise-import', data: DATA }, '*')
+  }else if(e.data.action === 'franchise-redirect'){
+    location = e.data.url;
   }
 }, false)
 
