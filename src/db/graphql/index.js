@@ -32,6 +32,8 @@ export class Configure extends React.Component {
 
     let credentials = (config.graphql && config.graphql.credentials) || {}
 
+
+
     const Field = (type, icon, className = '') => <div className='pt-input-group'>
       {icon ? <span className={className + ' pt-icon pt-icon-' + icon} /> : null}
       <input
@@ -68,8 +70,18 @@ export class Configure extends React.Component {
                     <span className="pt-icon-standard pt-icon-offline pt-align-right"></span>
           </button>}
       </p>
+      {connect.status != 'connected' && <p>
+        Or connect to a sample endpoint <a href="javascript:void(0)" onClick={e => connectEndpoint('https://graphql-pokemon.now.sh/') }>Pokemon Example</a>
+      </p>}
+
     </div>
   }
+}
+
+function connectEndpoint(endpoint){
+  State.apply('config', 'graphql', 'credentials', 'token', U.replace(''))
+  State.apply('config', 'graphql', 'credentials', 'endpoint', U.replace(endpoint))
+  connectDB()
 }
 
 export async function run(query) {

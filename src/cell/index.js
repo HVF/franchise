@@ -110,6 +110,9 @@ export class Cell extends React.Component {
             matchBrackets: true,
             addModeClass: true,
             placeholder: connect.status == 'connected' ? "Type query here, or click a bubble below." : '',
+            
+            tabSize: 2,
+            indentUnit: 2,
 
             showPredictions: true,
 
@@ -296,7 +299,7 @@ function SnippetWidget({ connect, view, cmr, updateView, config }){
     let db = DB(connect.active);
     var is_empty = (view.query || '').trim() === '';
     
-    if(!connect.schema) return null;
+    // if(!connect.schema) return null;
     if(connect.status !== 'connected') return null;
     if(view.markdown) return null;
     
@@ -330,7 +333,7 @@ function SnippetWidget({ connect, view, cmr, updateView, config }){
         cm.setCursor(1e8, 1e8)
         cm.focus()
     }
-    let visible_schema = connect.schema.filter(k => !(k.schema && k.schema.startsWith('_')) );
+    let visible_schema = connect.schema ? connect.schema.filter(k => !(k.schema && k.schema.startsWith('_')) ) : [];
     
     return <div className={'slice-editor-widget ' + (is_empty ? 'slice-visible' : 'slice-hidden')}>{
         visible_schema.length > 8 ? 
@@ -365,12 +368,12 @@ function SnippetWidget({ connect, view, cmr, updateView, config }){
                 >{table.name}</div>
             </BlueprintTooltip>
         )}
-        <BlueprintTooltip content={"Create Table"} position={Position.BOTTOM} intent={Intent.WARNING}>
+        {db.create_table_snippet && <BlueprintTooltip content={"Create Table"} position={Position.BOTTOM} intent={Intent.WARNING}>
             <div className="token create-table" 
                     onClick={e => replaceText(db.create_table_snippet(connect.schema), true) }>
                     <span className="pt-icon-standard pt-icon-plus"></span>
                 </div>
-        </BlueprintTooltip>
+        </BlueprintTooltip>}
 
         <BlueprintTooltip content={"Convert to Markdown Cell"} position={Position.BOTTOM}>
             <div className="token create-text" 
