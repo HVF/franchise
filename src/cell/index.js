@@ -28,11 +28,6 @@ import 'codemirror/addon/hint/show-hint.css'
 import 'codemirror/addon/hint/show-hint'
 import './sql-hint'
 
-import 'codemirror/addon/lint/lint'
-import 'codemirror-graphql/hint';
-import 'codemirror-graphql/lint';
-import 'codemirror-graphql/mode';
-
 import 'codemirror/addon/display/placeholder'
 
 import './md.less'
@@ -43,7 +38,6 @@ import swal from 'sweetalert2'
 
 import { addCell } from '../notebook'
 import { DB, getDB } from '../db/configure'
-import { buildGQLSchema } from '../db/graphql'
 
 import _ from 'lodash'
 
@@ -59,7 +53,7 @@ function Tooltip(props){
 
 
 
-export class Cell extends React.PureComponent {
+export class Cell extends React.Component {
     shouldComponentUpdate(nextProps){
         return nextProps.view !== this.props.view 
             || nextProps.connect !== this.props.connect
@@ -94,9 +88,8 @@ export class Cell extends React.PureComponent {
         let fresh = ((view.result && view.result.query) || '').trim() === (view.query || '').trim() 
             || view.error || (view.query || '').trim() === '' || view.loading || connect.status != 'connected';
 
-        // let reference = options.referenceFn || (s => '#' + s);
-        let hintRefRe = new RegExp(_.escapeRegExp(db.reference('SPLITTER')).replace('SPLITTER', '\\b(\\w*)\\b'))
-        let modeRefRe = new RegExp('^' + _.escapeRegExp(db.reference('SPLITTER')).replace('SPLITTER', '(\\w*)'))
+
+
 
         const sql_options = {
             mode: db.syntax || 'text/plain',
@@ -116,26 +109,12 @@ export class Cell extends React.PureComponent {
             autoCloseBrackets: true,
             matchBrackets: true,
             addModeClass: true,
-            // referenceFn: db.reference,
-            refRe: modeRefRe,
             placeholder: connect.status == 'connected' ? "Type query here, or click a bubble below." : '',
 
-            showPredictions: /sql|graphql/i.test(db.syntax) ? true : false,
+            showPredictions: true,
 
-            hintOptions: /sql/i.test(db.syntax) ? {
-              hint: CodeMirror.hint.sql,
-              // referenceFn: db.reference,
-              refRe: hintRefRe,
+            ...(db.CodeMirrorOptions ? db.CodeMirrorOptions(connect, virtualSchema) : {}),
 
-              tables: _.fromPairs((connect.schema || []).map(k => [k.name, k.columns]).concat(virtualSchema)),
-            } : db.syntax === 'graphql' ? {
-                hint: CodeMirror.hint.graphql,
-                schema: buildGQLSchema(connect.graphqlschema)
-            } : null,
-            lint: db.syntax === 'graphql' ? {
-                schema: buildGQLSchema(connect.graphqlschema)
-              } : null,
-            
             keyMap: "sublime",
         }
 

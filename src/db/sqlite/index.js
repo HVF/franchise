@@ -15,7 +15,7 @@ import 'whatwg-fetch'
 
 
 import { connectHelper, disconnectHelper, extractEditableColumns, assignSuggestedName, expandQueryRefs } from '../generic'
-export { getStagingValue, assembleDeltaQuery, updateStagingValue, create_table_snippet, select_table_snippet } from '../generic'
+export { getStagingValue, assembleDeltaQuery, updateStagingValue, create_table_snippet, select_table_snippet, CodeMirrorOptions } from '../generic'
 
 import CV from '../../util/codeviewer'
 import swal from 'sweetalert2'

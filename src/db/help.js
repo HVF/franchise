@@ -5,6 +5,7 @@ import * as State from '../state'
 import * as U from '../state/update'
 
 import { DB } from './configure'
+import ErrorBoundary from '../util/error'
 
 
 export default function HelpPage(props){
@@ -19,7 +20,9 @@ export default function HelpPage(props){
             <span className="pt-icon-standard pt-icon-help"></span>  {db.name} Help
         </div>
         <div className="help-content">
+            <ErrorBoundary>
             {db.Clippy ? <db.Clippy key="clippy" connect={connect} config={config[connect.active]}/> : null}
+            </ErrorBoundary>
         </div>
     </div>
 }

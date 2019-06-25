@@ -96,7 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
         }, {
             key: 'render',
             value: function render() {
-                return _react2.default.createElement(_SchemaDocsView.SchemaDocsView, { schema: this.props.schema });
+                return _react2.default.createElement(_SchemaDocsView.SchemaDocsView, { schema: new _model.Schema(this.props.schema) });
             }
         }]);
     

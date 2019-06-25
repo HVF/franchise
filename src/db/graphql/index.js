@@ -10,6 +10,12 @@ import { connectHelper, disconnectDB } from '../generic'
 export { disconnectDB, getStagingValue } from '../generic'
 import { GraphQLDocs } from './graphql-docs'
 
+import CodeMirror from 'codemirror'
+import 'codemirror/addon/lint/lint'
+import 'codemirror-graphql/hint';
+import 'codemirror-graphql/lint';
+import 'codemirror-graphql/mode';
+
 
 export const key = 'graphql'
 export const name = "GraphQL"
@@ -133,8 +139,7 @@ export function Clippy(props){
     return <div className="clippy-wrap">
         <div className="clippy">
             {props.connect.graphqlschema ? 
-              <GraphQLDocs schema={props.connect.graphqlschema}></GraphQLDocs> : null}
-
+              <GraphQLDocs schema={props.connect.graphqlschema.data}></GraphQLDocs> : null}
         </div>
     </div> 
 }
@@ -148,4 +153,21 @@ export async function connectDB() {
     State.apply('connect', '_db', U.replace(database()))
     State.apply('connect', 'graphqlschema', U.replace(await getSchema()))
   })
+}
+
+
+
+export function CodeMirrorOptions(connect, virtualSchema){
+
+    return {
+        mode: 'graphql',
+        
+        hintOptions: {
+            hint: CodeMirror.hint.graphql,
+            schema: buildGQLSchema(connect.graphqlschema),
+        }    ,
+        lint: buildGQLSchema(connect.graphqlschema)
+    }
+    
+            
 }
