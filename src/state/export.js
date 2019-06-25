@@ -116,7 +116,8 @@ async function makeURL(withCredentials, title){
             .replace("{{notebook_name}}", title)
             .replace("{{bin_data}}", bin_data)
             .replace("{{notebook_contents}}", State.getAll("notebook", "layout", U.each, "items", U.each, "query")
-                .join("\n\n========================================================n\n"))
+                .join("\n\n========================================================n\n")
+                .replace(/<\/script/g, 'script'))
     ]))
 }
 
