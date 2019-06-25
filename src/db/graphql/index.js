@@ -3,12 +3,12 @@ import _ from 'lodash'
 import { GraphQLClient } from 'graphql-request'
 import * as graphql from "graphql"
 
-import * as State from '../state'
-import * as U from '../state/update'
-import { connectHelper, disconnectDB } from './generic'
+import * as State from '../../state'
+import * as U from '../../state/update'
 
-export { disconnectDB, getStagingValue } from './generic'
-import { GraphQLDocs } from 'graphql-docs'
+import { connectHelper, disconnectDB } from '../generic'
+export { disconnectDB, getStagingValue } from '../generic'
+import { GraphQLDocs } from './graphql-docs'
 
 
 export const key = 'graphql'
@@ -39,7 +39,7 @@ export class Configure extends React.Component {
     </div>
 
     return <div>
-      <img src={require('./img/graphql.svg')} style={{ height: 60 }} />
+      <img src={require('../img/graphql.svg')} style={{ height: 60 }} />
       <p>
         {Field('endpoint', 'globe')}
       </p>
@@ -133,9 +133,7 @@ export function Clippy(props){
     return <div className="clippy-wrap">
         <div className="clippy">
             {props.connect.graphqlschema ? 
-              <GraphQLDocs fetcher={async (query) => {
-                return props.connect.graphqlschema
-              }}></GraphQLDocs> : null}
+              <GraphQLDocs schema={props.connect.graphqlschema}></GraphQLDocs> : null}
 
         </div>
     </div> 

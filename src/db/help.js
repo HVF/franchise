@@ -5,7 +5,6 @@ import * as State from '../state'
 import * as U from '../state/update'
 
 import { DB } from './configure'
-// import { Icon } from '@blueprintjs/core';
 
 
 export default function HelpPage(props){
