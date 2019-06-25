@@ -1,2 +1,2 @@
-import { Toaster } from "@blueprintjs/core";
+import { Toaster } from '@blueprintjs/core'
 export default Toaster.create()

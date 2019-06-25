@@ -1,4 +1,4 @@
-var StatsPlugin = require("stats-webpack-plugin")
+var StatsPlugin = require('stats-webpack-plugin')
 var webpack = require('webpack')
 
 module.exports = {
@@ -7,31 +7,31 @@ module.exports = {
         node: {
             fs: 'empty',
             net: 'empty',
-            tls: 'empty'
+            tls: 'empty',
         },
         extra: {
             plugins: [
                 new StatsPlugin('stats.json', {
-                    chunkModules: true
+                    chunkModules: true,
                 }),
                 new webpack.ContextReplacementPlugin(
                     /graphql-language-service-interface[\\/]dist$/,
                     new RegExp(`^\\./.*\\.js$`)
-                )
+                ),
             ],
         },
 
         publicPath: '',
         uglify: {
             compress: {
-                warnings: false
+                warnings: false,
             },
             output: {
-                comments: false
+                comments: false,
             },
             sourceMap: true,
-            exclude: /worker\.js/
-        }
+            exclude: /worker\.js/,
+        },
     },
     babel: {
         stage: 1,
@@ -43,5 +43,5 @@ module.exports = {
         //         chrome: 59
         //     }
         // }]]
-    }
+    },
 }

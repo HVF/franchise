@@ -61,8 +61,11 @@
     "electron-builder": "^20.44.4",
     "file-loader": "^0.11.2",
     "gh-pages": "^1.0.0",
+    "husky": "^2.5.0",
+    "lint-staged": "^8.2.1",
     "nwb": "^0.18.10",
     "nwb-less": "^0.5.1",
+    "prettier": "^1.18.2",
     "raw-loader": "^0.5.1",
     "stats-webpack-plugin": "^0.6.1",
     "uglify-loader": "^2.0.0",
@@ -76,6 +79,15 @@
     "mac": {
       "category": "your.app.category.type"
     }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{tsx,ts,js,jsx,json,css,less}": ["prettier --write", "git add"],
+    ".{prettierrc,babelrc}": ["prettier --write", "git add"]
   },
   "author": "Eponymous Labs, Inc.",
   "repository": "git@github.com:HVF/franchise.git",

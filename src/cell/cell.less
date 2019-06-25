@@ -63,7 +63,6 @@
         font-family: Menlo, Monaco, monospace;
     }
 
-
     .cm-matchhighlight {
         border: 1px solid #b9b9b9;
         border-radius: 2px;
@@ -71,10 +70,10 @@
     }
 
     .CodeMirror-completion {
-            color: #aaa;
-            // .prefix {
-            //   text-decoration: underline;
-            // }
+        color: #aaa;
+        // .prefix {
+        //   text-decoration: underline;
+        // }
     }
 
     .CodeMirror-placeholder {
@@ -108,13 +107,18 @@
 }
 
 .stale .CodeMirror-lines {
-    background: repeating-linear-gradient(130deg, #ffffff, #ffffff 0.3em /* black stripe */,    #f7f7f7 0, #f7f7f7 0.6em /* blue stripe */ );
+    background: repeating-linear-gradient(
+        130deg,
+        #ffffff,
+        #ffffff 0.3em /* black stripe */,
+        #f7f7f7 0,
+        #f7f7f7 0.6em /* blue stripe */
+    );
 }
 
 .stale .CodeMirror-focused .CodeMirror-lines {
     background: white;
 }
-
 
 .slice {
     border: 1px solid #d8d8d8;
@@ -127,8 +131,6 @@
     // opacity: 0.7;
     cursor: move;
 }
-
-
 
 .slice .controls {
     /* position: absolute; */
@@ -149,7 +151,6 @@
 
     display: flex;
     flex-direction: column;
-
 
     &.stale {
         // background: repeating-linear-gradient(130deg,    #eaeaea, #eaeaea 0.3em /* black stripe */,    #f5f8fa 0, #f5f8fa 0.6em /* blue stripe */ );
@@ -184,21 +185,17 @@
     }
 }
 
-
-
-
 .slice.markdown .controls {
     background: white;
     border-left: 1px solid white;
     transition: all 0.1s linear;
 }
 
-.slice.markdown .controls:hover, .bread-col.dragging .controls {
+.slice.markdown .controls:hover,
+.bread-col.dragging .controls {
     background: #f5faf6;
     border-left: 1px solid #dfdfdf;
 }
-
-
 
 i.fa {
     outline: none;
@@ -239,8 +236,6 @@ i.fa {
     color: purple;
 }
 
-
-
 .schema-token {
     background: rgba(0, 172, 193, 0.05);
     border-radius: 2px;
@@ -262,14 +257,14 @@ i.fa {
     opacity: 1;
     line-height: 35px;
 
-    transition:  opacity 0.3s linear;
+    transition: opacity 0.3s linear;
 
     .token {
-        border: 1px solid #56CCF2;
-        background: #E4F8FF;
+        border: 1px solid #56ccf2;
+        background: #e4f8ff;
         border-radius: 20px;
         display: inline;
-        color: #56CCF2;
+        color: #56ccf2;
         font-family: sans-serif;
         padding: 5px 10px;
         margin: 0 5px;
@@ -293,9 +288,7 @@ i.fa {
         z-index: -1;
         pointer-events: none;
     }
-
 }
-
 
 .pt-menu-item-label {
     max-width: 200px;
@@ -311,7 +304,6 @@ i.fa {
 //   animation-name: bounce;
 // }
 
-
 // @keyframes bounce {
 //   0%, 100% {
 //     transform: translateY(1px);
@@ -320,7 +312,6 @@ i.fa {
 //     transform: translateY(-2px);
 //   }
 // }
-
 
 .archived-slice {
     .CodeMirror-lines {
@@ -339,10 +330,12 @@ i.fa {
     }
 }
 
-.controls button.selected .Halo, .controls button.selected .point {
+.controls button.selected .Halo,
+.controls button.selected .point {
     fill: #8e8ec1;
 }
 
-.controls button:hover .Halo, .controls button:hover .point {
-    fill: #F24440;
+.controls button:hover .Halo,
+.controls button:hover .point {
+    fill: #f24440;
 }

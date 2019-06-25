@@ -37,31 +37,29 @@
     cursor: text;
 }
 
-
-
 .vertical-divider::after {
-    width:1px;
-    background: #D4D4D4;   
-    content: " ";
+    width: 1px;
+    background: #d4d4d4;
+    content: ' ';
     height: 100%;
     display: block;
     flex-shrink: 0;
 }
 
-.divider:hover, .vertical-divider:hover {
+.divider:hover,
+.vertical-divider:hover {
     opacity: 1;
 }
 
 .divider::after {
-    height:1px;
-    background: #D4D4D4;   
-    content: " ";
+    height: 1px;
+    background: #d4d4d4;
+    content: ' ';
     width: 100%;
     display: block;
 }
 
-
-.bread-row.insert-top .divider.divider-top::after, 
+.bread-row.insert-top .divider.divider-top::after,
 .bread-row.insert-bottom .divider.divider-bottom::after,
 .bread-col.insert-left .vertical-divider.divider-left::after,
 .bread-col.insert-right .vertical-divider.divider-right::after {
@@ -81,18 +79,16 @@
     padding: 5px 0;
 }
 
-
 .bread-enter {
     /* 0 does not work so we have to use a small number */
     /* Start our small */
-    flex: .00001;
+    flex: 0.00001;
     overflow: hidden;
 
     -webkit-animation: flexGrow 300ms ease forwards;
     -o-animation: flexGrow 300ms ease forwards;
     animation: flexGrow 300ms ease forwards;
 }
-
 
 .bread-exit {
     flex: 1;
@@ -107,32 +103,37 @@
     min-width: 200px;
 }
 
-
 @-webkit-keyframes flexGrow {
-    to { flex: 1; }
+    to {
+        flex: 1;
+    }
 }
 @-o-keyframes flexGrow {
-    to { flex: 1; }
+    to {
+        flex: 1;
+    }
 }
 @keyframes flexGrow {
-    to { flex: 1; }
+    to {
+        flex: 1;
+    }
 }
 
 @-webkit-keyframes flexShrink {
     to {
-        flex: .01;
-        flex: .00001;
+        flex: 0.01;
+        flex: 0.00001;
     }
 }
 @-o-keyframes flexShrink {
     to {
-        flex: .01;
-        flex: .00001;
+        flex: 0.01;
+        flex: 0.00001;
     }
 }
 @keyframes flexShrink {
     to {
-        flex: .01;
-        flex: .00001;
+        flex: 0.01;
+        flex: 0.00001;
     }
 }

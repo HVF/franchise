@@ -1,4 +1,4 @@
-@import "explain.less";
+@import 'explain.less';
 
 .ct-chart {
     flex-grow: 1;
@@ -7,7 +7,6 @@
     min-height: 300px;
 }
 
-
 .table-popup {
     .table-td {
         word-wrap: break-word;
@@ -15,26 +14,21 @@
     }
 }
 
-
 .result-loading {
     opacity: 0.4;
 }
-
 
 .visualizer-loading {
     flex-grow: 1;
     padding: 10px;
     opacity: 0.4;
     border-top: 1px solid #d7d8da;
-    
+
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
     background: #f5f8fa;
 }
-
-
-
 
 .output-wrap {
     display: flex;
@@ -50,8 +44,6 @@
             border-radius: 3px;
             border: 1px solid #d3d6d8;
         }
-
-
     }
 
     border-bottom-right-radius: 4px;
@@ -79,18 +71,17 @@
     }
 }
 
-
 .inline {
-    .pivot-visualizer, .bp-table-container {
+    .pivot-visualizer,
+    .bp-table-container {
         max-height: 300px;
     }
-    
+
     .single-row {
         max-height: 400px;
     }
 }
 .bp-table-container {
-
     min-height: 150px;
     box-shadow: none;
     border-top: 1px solid rgba(16, 22, 26, 0.15);
@@ -99,7 +90,6 @@
     // on chrome where the border on the controls strip for the outputs
     // only sometimes shows up for some reason
     border-right: 1px solid transparent;
-
 
     background: transparent;
     flex-grow: 1;
@@ -114,20 +104,18 @@
         min-width: 35px;
     }
 
-
     .editable-icon {
         margin-top: 8px;
         color: #aaaaaa;
         float: right;
     }
-
 }
 
 // .error {
 //     background: maroon;
 //     padding: 14px 24px;
 //     color: white;
-    
+
 //     border-bottom-left-radius: 3px;
 //     border-bottom-right-radius: 3px;
 // }
@@ -145,12 +133,11 @@
     flex-grow: 1;
     padding: 10px;
     border-top: 1px solid #d7d8da;
-    
+
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
     background: #f5f8fa;
-
 
     display: flex;
     align-items: center;
@@ -174,9 +161,7 @@
     }
 }
 
-
 .field-value {
-
     white-space: pre-wrap;
 }
 
@@ -186,7 +171,6 @@
     flex-grow: 1;
     padding: 20px;
     line-height: 1.5;
-    
 
     th {
         text-align: left;
@@ -225,8 +209,6 @@
     flex: 1;
 }
 
-
-
 .exporter {
     flex: 1;
     display: flex;
@@ -246,7 +228,7 @@
             button {
                 margin: 0 5px;
             }
-        }    
+        }
     }
 }
 
@@ -257,7 +239,7 @@
 }
 
 .chart {
-    -webkit-user-select: none
+    -webkit-user-select: none;
 }
 
 .leaflet-div-icon {

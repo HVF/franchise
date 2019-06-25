@@ -4,7 +4,7 @@ import { Intent } from '@blueprintjs/core'
 import _ from 'lodash'
 import { getDB } from '../db/configure'
 
-function restoreDefault(){
+function restoreDefault() {
     // var credentials = {};
     // try {
     //     credentials = JSON.parse(localStorage.credentials);
@@ -20,83 +20,92 @@ function restoreDefault(){
         },
         trash: {
             open: false,
-            cells: []
+            cells: [],
         },
         deltas: {
             open: false,
-            changes: []
+            changes: [],
         },
         notebook: {
-            layout: []
-        }
+            layout: [],
+        },
     }
 
     State.set(DEFAULT_STATE)
 }
 
+window.addEventListener(
+    'message',
+    (e) => {
+        if (e.data && e.data.action === 'franchise-import') {
+            try {
+                console.log('restoring from postmessage')
+            } catch (err) {
+                console.error(err)
+            }
+        }
+    },
+    false
+)
 
-window.addEventListener("message", e => {
-    if(e.data && e.data.action === 'franchise-import'){
-        try {
-            console.log('restoring from postmessage')
-        } catch (err) { console.error(err) }
-    }
-}, false);
-
-export function importData(dump){
-    if(dump.version != 2) throw new Error('Incompatible format version');
-    State.set(dump.state);
-    if(dump.autoconnect){
-        let db = getDB();
-        if(db.connectDB){
+export function importData(dump) {
+    if (dump.version != 2) throw new Error('Incompatible format version')
+    State.set(dump.state)
+    if (dump.autoconnect) {
+        let db = getDB()
+        if (db.connectDB) {
             db.connectDB(dump.databaseDump)
-        }else{
+        } else {
             console.warn('Active database connector does not export connectDB method.')
         }
     }
 }
 
-if(State.get()){
+if (State.get()) {
     // we already got data woot woot
-}else if(sessionStorage.importData){
+} else if (sessionStorage.importData) {
     try {
-        var data = JSON.parse(sessionStorage.importData);
-        delete sessionStorage.importData;
-    } catch (err) { console.error(err) }
+        var data = JSON.parse(sessionStorage.importData)
+        delete sessionStorage.importData
+    } catch (err) {
+        console.error(err)
+    }
     importData(data)
-}else if(sessionStorage.autosave){
+} else if (sessionStorage.autosave) {
     try {
         var data = JSON.parse(sessionStorage.autosave)
-    } catch (err) { console.error(err) }
+    } catch (err) {
+        console.error(err)
+    }
     Toaster.show({
         message: 'Restored from most recent autosave.',
         intent: Intent.SUCCESS,
         action: {
             onClick: () => restoreDefault(),
-            text: "Clear Notebook"
-        }
+            text: 'Clear Notebook',
+        },
     })
     importData(data)
-}else if(localStorage.autosave){
+} else if (localStorage.autosave) {
     try {
         var data = JSON.parse(localStorage.autosave)
-    } catch (err) { console.error(err) }
-    if(data){
+    } catch (err) {
+        console.error(err)
+    }
+    if (data) {
         Toaster.show({
             message: 'Restore from the most recent autosave?',
             intent: Intent.SUCCESS,
             action: {
                 onClick: () => importData(data),
-                text: "Restore"
-            }
-        })    
+                text: 'Restore',
+            },
+        })
     }
     restoreDefault()
-}else{
+} else {
     restoreDefault()
 }
-
-
 
 // if(sessionStorage.importData){
 //     try {

@@ -1,5 +1,5 @@
 @import '~normalize.css/normalize.css';
-@import "~@blueprintjs/core/dist/blueprint.css";
+@import '~@blueprintjs/core/dist/blueprint.css';
 @import '~@blueprintjs/table/dist/table.css';
 @import '~@blueprintjs/labs/dist/blueprint-labs.css';
 
@@ -16,7 +16,8 @@
 @import './db/configure.less';
 @import './cell/visualizer.less';
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -25,7 +26,6 @@ body {
     background: hsla(0, 0%, 97%, 1);
     -webkit-app-region: drag;
 }
-
 
 .header {
     overflow: auto;
@@ -71,7 +71,6 @@ body {
     }
 }
 
-
 .export-btn:hover {
     background: #aaa;
 }
@@ -105,14 +104,11 @@ body {
     color: gray;
 }
 
-
 .archived-slice {
     .bread-col {
         padding: 10px 17px;
     }
 }
-
-
 
 .toggler {
     margin: 0px 20px;
@@ -128,7 +124,6 @@ body {
     height: 100px;
 }
 
-
 .pt-tooltip {
     box-shadow: none;
 }
@@ -139,18 +134,16 @@ body {
     left: 0;
     right: 0;
     background: #fbf2e9;
-    
+
     color: #dd9044;
     z-index: 10;
     border-top: 1px solid #e9b684;
-
 
     .toggle-delta {
         user-select: none;
         padding: 15px 20px;
         cursor: pointer;
     }
-
 }
 
 .changes button {
@@ -180,9 +173,7 @@ body {
     }
 }
 
-
 .clippy-wrap {
-    
     margin: 20px auto;
     padding: 0 18px;
 
@@ -190,7 +181,7 @@ body {
         // background: rgba(255,255,255,.3);
         // padding: 20px;
         border-radius: 3px;
-        opacity: .8;
+        opacity: 0.8;
         h2 {
             font-size: inherit;
         }
@@ -211,7 +202,6 @@ body {
     }
 
     .clippy-contents {
-        
     }
 }
 
@@ -219,7 +209,6 @@ body {
     -webkit-column-break-inside: avoid;
     overflow: auto;
 }
-
 
 .first-page {
     min-height: 100vh;
@@ -273,7 +262,6 @@ body {
     padding: 0 18px;
 }
 
-
 @media (max-width: 700px) {
     .bread-row > div {
         display: block;
@@ -295,28 +283,33 @@ body {
         display: none;
     }
 
-    .bread-row .bread-col, .fake-slice, .configure {
+    .bread-row .bread-col,
+    .fake-slice,
+    .configure {
         margin: 0 10px;
     }
-    .clippy-wrap, .header {
+    .clippy-wrap,
+    .header {
         padding: 0 10px;
     }
-
-    
-
 }
 
 @media (min-width: 800px) {
-    .row-1, .configure-wrap, .clippy-wrap, .header {
+    .row-1,
+    .configure-wrap,
+    .clippy-wrap,
+    .header {
         max-width: 90vw;
         margin-left: auto;
         margin-right: auto;
     }
 }
 
-
 @media (min-width: 1000px) {
-    .row-1, .configure-wrap, .clippy-wrap, .header {
+    .row-1,
+    .configure-wrap,
+    .clippy-wrap,
+    .header {
         max-width: 70vw;
         margin-left: auto;
         margin-right: auto;
