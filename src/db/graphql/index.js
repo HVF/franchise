@@ -29,7 +29,7 @@ export class Configure extends React.Component {
             token: 'authorization token (optional)',
         }
 
-        let credentials = (config.graphql && config.graphql.credentials) || {}
+        let credentials = (config.credentials && config.credentials.graphql) || {}
 
         const Field = (type, icon, className = '') => (
             <div className="pt-input-group">
@@ -108,8 +108,8 @@ export class Configure extends React.Component {
 }
 
 function connectEndpoint(endpoint) {
-    State.apply('config', 'graphql', 'credentials', 'token', U.replace(''))
-    State.apply('config', 'graphql', 'credentials', 'endpoint', U.replace(endpoint))
+    State.apply('config', 'credentials', 'graphql', 'token', U.replace(''))
+    State.apply('config', 'credentials', 'graphql', 'endpoint', U.replace(endpoint))
     connectDB()
 }
 
@@ -133,7 +133,7 @@ export function reference(name) {
 }
 
 const database = () => {
-    const { endpoint, token } = State.get('config', 'graphql', 'credentials')
+    const { endpoint, token } = State.get('config', 'credentials', 'graphql')
     const options = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
     return new GraphQLClient(endpoint, options)
 }
@@ -155,15 +155,13 @@ const getSchema = async () => {
 function formatResults(data) {
     if (Array.isArray(data)) {
         return {
+            object: data,
             columns: Object.keys(data[0]),
             values: data.map((d) => Object.values(d)),
         }
     } else {
-        console.log({
-            columns: Object.keys(data),
-            values: [Object.values(data)],
-        })
         return {
+            object: data,
             columns: Object.keys(data),
             values: [Object.values(data)],
         }

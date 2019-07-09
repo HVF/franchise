@@ -40,8 +40,10 @@ export class Configure extends React.Component {
         // <p>Tried to connect {this.state.tries} times.</p>
         const { connect, config } = this.props
 
-        let { credentials, useLegacySql } = config.bigquery || {}
-        credentials = credentials || {}
+        // let { credentials, useLegacySql } = config.bigquery || {}
+        // credentials = credentials || {}
+        let credentials = (config.credentials || {}).bigquery || {}
+        let { useLegacySql } = credentials
 
         const getfile = (file) => {
             var reader = new FileReader()
@@ -50,7 +52,7 @@ export class Configure extends React.Component {
                     name: file.name,
                     data: Buffer(reader.result).toString('hex'),
                 }
-                State.apply('config', 'bigquery', 'credentials', U.def({}), U.merge({ keyFile }))
+                State.apply('config', 'credentials', 'bigquery', U.def({}), U.merge({ keyFile }))
             }
             console.log(file)
             reader.readAsArrayBuffer(file)
@@ -110,9 +112,7 @@ export class Configure extends React.Component {
                             </div>
                         </label>
 
-                        {credentials.bigquery &&
-                        credentials.bigquery.keyFile &&
-                        !credentials.bigquery.keyFile.name.match(/\.json$/) ? (
+                        {credentials.keyFile && !credentials.keyFile.name.match(/\.json$/) ? (
                             <div className="pt-control-group pt-vertical">
                                 <div className="pt-input-group">
                                     {/*<span className={className+' pt-icon pt-icon-'+icon}/>*/}
@@ -129,8 +129,8 @@ export class Configure extends React.Component {
                                         onChange={(e) =>
                                             State.apply(
                                                 'config',
-                                                'bigquery',
                                                 'credentials',
+                                                'bigquery',
                                                 'projectId',
                                                 U.replace(e.target.value)
                                             )
@@ -151,8 +151,8 @@ export class Configure extends React.Component {
                                         onChange={(e) =>
                                             State.apply(
                                                 'config',
-                                                'bigquery',
                                                 'credentials',
+                                                'bigquery',
                                                 'email',
                                                 U.replace(e.target.value)
                                             )
@@ -170,6 +170,7 @@ export class Configure extends React.Component {
                                 onChange={(e) =>
                                     State.apply(
                                         'config',
+                                        'credentials',
                                         'bigquery',
                                         'useLegacySql',
                                         U.replace(e.target.checked)
@@ -264,7 +265,7 @@ async function _runQuery(query) {
 
 export async function connectDB() {
     await connectHelper(async function() {
-        const credentials = State.get('config', 'bigquery', 'credentials')
+        const credentials = State.get('config', 'credentials', 'bigquery')
         // if(credentials.keyFile.name && credentials.keyFile.name.match(/\.json$/))
         let result = await sendRequest({ action: 'open', db: 'bigquery', credentials })
         if (!result.ready) throw new Error(result.error)

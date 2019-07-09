@@ -19,7 +19,7 @@ export async function bridgeConnected() {
     console.log('bridge connect')
     const credentials = await sendRequest({ action: 'get_postgres_credentials' })
 
-    State.apply('config', 'postgres', 'credentials', U.def({}), (old_credentials) => ({
+    State.apply('config', 'credentials', 'postgres', U.def({}), (old_credentials) => ({
         ...credentials,
         ...old_credentials,
         autofilled: Object.keys(credentials)
@@ -58,7 +58,7 @@ export class Configure extends React.Component {
             password: 'password (optional)',
         }
 
-        let credentials = (config.postgres && config.postgres.credentials) || {}
+        let credentials = (config.credentials && config.credentials.postgres) || {}
 
         const Field = (type, icon, className = '') => (
             <div className="pt-input-group">
@@ -71,8 +71,8 @@ export class Configure extends React.Component {
                     onChange={(e) =>
                         State.apply(
                             'config',
-                            'postgres',
                             'credentials',
+                            'postgres',
                             type,
                             U.replace(e.target.value)
                         )
@@ -209,7 +209,7 @@ export async function connectDB() {
         let result = await sendRequest({
             action: 'open',
             db: 'postgres',
-            credentials: State.get('config', 'postgres', 'credentials'),
+            credentials: State.get('config', 'credentials', 'postgres'),
         })
         if (!result.ready) throw new Error(result.error)
 

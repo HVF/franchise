@@ -5,14 +5,15 @@ import _ from 'lodash'
 import { getDB } from '../db/configure'
 
 function restoreDefault() {
-    // var credentials = {};
-    // try {
-    //     credentials = JSON.parse(localStorage.credentials);
-    // } catch (err) {}
+    var credentials = {}
+    try {
+        credentials = JSON.parse(localStorage.credentials)
+    } catch (err) {}
+
     const DEFAULT_STATE = {
         config: {
             open: false,
-            // credentials: credentials
+            credentials: credentials,
         },
         connect: {
             active: localStorage.activeConnector || 'sqlite',

@@ -250,6 +250,8 @@ export class CardVisualizer extends React.Component {
         }
 
         function getStagingValue(rowIndex, colIndex) {
+            if (!db.getStagingValue) return null
+
             return db.getStagingValue(
                 deltas,
                 getRawValue(rowIndex, colIndex),
@@ -260,8 +262,6 @@ export class CardVisualizer extends React.Component {
                 config
             )
         }
-
-        console.log('config', config)
 
         function renderValue(rowIndex, colIndex) {
             let changed_value = getStagingValue(rowIndex, colIndex)

@@ -346,7 +346,7 @@ export function CodeMirrorOptions(connect, virtualSchema) {
     )
 
     return {
-        mode: 'text/x-pgsql',
+        mode: db.syntax || 'text/x-pgsql',
         // showPredictions: true,
 
         refRe: modeRefRe,

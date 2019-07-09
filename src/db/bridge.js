@@ -123,7 +123,7 @@ export function FranchiseClientConnector({ connect }) {
                 <h5>Connect the Database Bridge</h5>
 
                 <div>
-                    Run <code>npx franchise-client@0.2.7</code> in your terminal to start the
+                    Run <code>npx franchise-client@0.3.0</code> in your terminal to start the
                     franchise database bridge.
                 </div>
                 <div>

@@ -320,7 +320,30 @@ class SingleResultVisualizer extends React.Component {
     }
 }
 
+import ReactJson from 'react-json-view'
+
+class TreeVisualizer extends React.Component {
+    static key = 'tree'
+    static desc = 'Tree'
+    static icon = <i className="fa fa-cubes" aria-hidden="true" />
+
+    static test(result) {
+        return result.object
+    }
+
+    render() {
+        let { result, view } = this.props
+
+        return (
+            <div className={'single-result ' + (view.loading ? 'result-loading ' : '')}>
+                <ReactJson collapsed={2} src={result.object} />
+            </div>
+        )
+    }
+}
+
 const Visualizers = [
+    TreeVisualizer,
     ExplainVisualizer,
     PivotVisualizer,
     TableVisualizer,

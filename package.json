@@ -41,6 +41,7 @@
     "react-collapse": "^4.0.2",
     "react-dom": "^16.8.6",
     "react-error-boundary": "^1.2.5",
+    "react-json-view": "^1.19.1",
     "react-leaflet": "^2.4.0",
     "react-motion": "^0.5.0",
     "sql.js": "^0.4.0",

@@ -42,7 +42,8 @@ export class Configure extends React.Component {
             apiKey: 'API key',
         }
 
-        let credentials = (config.carto && config.carto.credentials) || {}
+        // let credentials = (config.carto && config.carto.credentials) || {}
+        let credentials = (config.credentials && config.credentails.carto) || {}
 
         const Field = (type, icon, className = '') => (
             <div className="pt-input-group">
@@ -55,8 +56,8 @@ export class Configure extends React.Component {
                     onChange={(e) =>
                         State.apply(
                             'config',
-                            'carto',
                             'credentials',
+                            'carto',
                             type,
                             U.replace(e.target.value)
                         )
@@ -126,13 +127,13 @@ export function disconnectDB() {
 export async function sendRequest(query) {
     let response = await fetch(
         'https://' +
-            State.get('config', 'carto', 'credentials', 'user') +
+            State.get('config', 'credentials', 'carto', 'user') +
             '.' +
-            State.get('config', 'carto', 'credentials', 'host') +
+            State.get('config', 'credentials', 'carto', 'host') +
             '/api/v1/sql?q=' +
             query +
             '&api_key=' +
-            State.get('config', 'carto', 'credentials', 'apiKey')
+            State.get('config', 'credentials', 'carto', 'apiKey')
     )
 
     return await response.json()
@@ -147,7 +148,7 @@ async function getSchema() {
     try {
         table_list = await sendRequest(
             "SELECT table_schema, table_name, column_name FROM information_schema.columns WHERE table_schema = '" +
-                State.get('config', 'carto', 'credentials', 'user') +
+                State.get('config', 'credentials', 'carto', 'user') +
                 "' and table_name not like 'analysis_%25'"
         )
     } catch (exception) {}

@@ -8,7 +8,6 @@ import ReactCodeMirror from '@skidding/react-codemirror'
 import CodeMirror from 'codemirror'
 
 // import 'codemirror/mode/sql/sql'
-import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/markdown/markdown'
 import 'codemirror/keymap/sublime'
 
@@ -153,43 +152,51 @@ export class Cell extends React.Component {
                             value={view.query}
                             key="a"
                             ref={(e) => (this.cmr = e)}
-                            onChange={(query) => updateView({ query: query })}
+                            onChange={(query) => {
+                                // this is a silly patch for a graphql-codemirror bug
+                                // https://github.com/graphql/graphiql/issues/735
+                                updateView({ query: query.replace(/\xa0/g, ' ') })
+                            }}
                             options={md ? md_options : sql_options}
                         />
 
-                        <BlueprintTooltip
-                            content={
-                                <span>
-                                    Refer to the results of this cell with{' '}
-                                    <strong>{db.reference(view.name || view.suggestedName)}</strong>
-                                </span>
-                            }
-                            className="pt-tooltip-indicator"
-                        >
-                            <div
-                                className={
-                                    'name ' +
-                                    (view.result && view.result.nameable && db.reference
-                                        ? 'shown'
-                                        : '')
+                        {db.reference && (
+                            <BlueprintTooltip
+                                content={
+                                    <span>
+                                        Refer to the results of this cell with{' '}
+                                        <strong>
+                                            {db.reference(view.name || view.suggestedName)}
+                                        </strong>
+                                    </span>
                                 }
+                                className="pt-tooltip-indicator"
                             >
-                                <span style={{ color: '#adb7bf' }}>
-                                    {db.reference('SPLITTER').split('SPLITTER')[0] || ''}
-                                </span>
-                                <EditableText
-                                    value={view.name}
-                                    onChange={(name) =>
-                                        updateView({ name: name.replace(/[^\w]/g, '') })
+                                <div
+                                    className={
+                                        'name ' +
+                                        (view.result && view.result.nameable && db.reference
+                                            ? 'shown'
+                                            : '')
                                     }
-                                    placeholder={view.suggestedName}
-                                    minWidth={30}
-                                />
-                                <span style={{ color: '#adb7bf' }}>
-                                    {db.reference('SPLITTER').split('SPLITTER')[1] || ''}
-                                </span>
-                            </div>
-                        </BlueprintTooltip>
+                                >
+                                    <span style={{ color: '#adb7bf' }}>
+                                        {db.reference('SPLITTER').split('SPLITTER')[0] || ''}
+                                    </span>
+                                    <EditableText
+                                        value={view.name}
+                                        onChange={(name) =>
+                                            updateView({ name: name.replace(/[^\w]/g, '') })
+                                        }
+                                        placeholder={view.suggestedName}
+                                        minWidth={30}
+                                    />
+                                    <span style={{ color: '#adb7bf' }}>
+                                        {db.reference('SPLITTER').split('SPLITTER')[1] || ''}
+                                    </span>
+                                </div>
+                            </BlueprintTooltip>
+                        )}
 
                         <div className="controls" onMouseDown={this.props.beginDrag}>
                             <Tooltip content="Archive Cell">

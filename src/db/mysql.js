@@ -25,7 +25,7 @@ export async function bridgeConnected() {
         user: 'root',
         password: '',
     }
-    State.apply('config', 'mysql', 'credentials', U.def({}), (old_credentials) => ({
+    State.apply('config', 'credentials', 'mysql', U.def({}), (old_credentials) => ({
         ...credentials,
         ...old_credentials,
         autofilled: Object.keys(credentials)
@@ -74,7 +74,7 @@ export class Configure extends React.Component {
             user: 'dbuser',
             password: 'password (optional)',
         }
-        let credentials = (config.mysql && config.mysql.credentials) || {}
+        let credentials = (config.credentials && config.credentials.mysql) || {}
 
         const Field = (type, icon, className = '') => (
             <div className="pt-input-group">
@@ -87,8 +87,8 @@ export class Configure extends React.Component {
                     onChange={(e) =>
                         State.apply(
                             'config',
-                            'mysql',
                             'credentials',
+                            'mysql',
                             type,
                             U.replace(e.target.value)
                         )
