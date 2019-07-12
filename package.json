@@ -47,7 +47,6 @@
     "sql.js": "^0.4.0",
     "sqlgenerate": "https://github.com/jdrew1303/sqlgenerate",
     "sqlite-parser": "^1.0.1",
-    "sweetalert-react": "^0.4.11",
     "sweetalert2": "^8.13.0",
     "tmp": "^0.0.33",
     "tsparser": "^1.0.2",
