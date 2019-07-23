@@ -5,9 +5,6 @@ jobs:
   build_macos:
     macos:
       xcode: "10.0.0"
-    branches:
-      only:
-        - master
     steps:
       - checkout
       - restore_cache:
@@ -33,9 +30,6 @@ jobs:
   build_windows:
     docker:
       - image: electronuserland/builder:wine
-    branches:
-      only:
-        - master
     steps:
       - checkout
       - restore_cache:
@@ -81,5 +75,11 @@ workflows:
   build:
     jobs:
       - build_web
-      - build_macos
-      - build_windows
+      - build_macos:
+          filters:
+              branches:
+                only: master
+      - build_windows:
+          filters:
+              branches:
+                only: master
