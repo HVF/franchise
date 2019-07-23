@@ -77,7 +77,8 @@
     "productName": "Franchise",
     "copyright": "Copyright © Eponymous Labs, Inc. 2017-2019",
     "mac": {
-      "category": "your.app.category.type"
+      "category": "public.app-category.developer-tools",
+      "hardenedRuntime": true
     }
   },
   "husky": {
