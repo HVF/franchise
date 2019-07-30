@@ -5,13 +5,20 @@ exports.default = async function notarizing(context) {
     if (electronPlatformName !== 'darwin') {
         return
     }
+    console.log('afterSign hook triggered', context)
 
     const appName = context.packager.appInfo.productFilename
 
-    return await notarize({
-        appBundleId: 'com.eponymous.franchise',
-        appPath: `${appOutDir}/${appName}.app`,
-        appleId: process.env.APPLE_ID,
-        appleIdPassword: process.env.APPLE_PW,
-    })
+    try {
+        await notarize({
+            appBundleId: 'com.eponymous.franchise',
+            appPath: `${appOutDir}/${appName}.app`,
+            appleId: process.env.APPLE_ID,
+            appleIdPassword: process.env.APPLE_PW,
+        })
+    } catch (err) {
+        console.error(error)
+    }
+
+    console.log(`Done notarizing ${appName}`)
 }
