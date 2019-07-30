@@ -29,6 +29,7 @@
     "codemirror-graphql": "^0.6.11",
     "css-loader": "^3.0.0",
     "d3-shape": "^1.2.0",
+    "electron-notarize": "^0.1.1",
     "font-awesome": "^4.7.0",
     "franchise-client": "^0.2.7",
     "graphql": "^14.3.1",
@@ -76,6 +77,7 @@
     "appId": "com.eponymous.franchise",
     "productName": "Franchise",
     "copyright": "Copyright © Eponymous Labs, Inc. 2017-2019",
+    "afterSign": "./build/notarize.js",
     "mac": {
       "category": "public.app-category.developer-tools",
       "hardenedRuntime": true
