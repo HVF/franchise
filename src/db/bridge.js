@@ -10,7 +10,6 @@ import * as U from '../state/update'
 import { UnmountClosed } from 'react-collapse'
 
 const RETRY_INTERVAL = 1000
-const BRIDGE_URL = 'ws://localhost:14645'
 
 let clientConnectorSocket = null
 let checkConnectorInterval
@@ -23,7 +22,7 @@ var bridgeAlive = true
 
 function tryOpenBridge() {
     try {
-        clientConnectorSocket = new WebSocket(BRIDGE_URL)
+        clientConnectorSocket = new WebSocket("ws://" + window.location.hostname + ":14645");
     } catch (err) {
         State.apply('connect', 'bridge_status', U.replace('mixed_fail'))
     }
