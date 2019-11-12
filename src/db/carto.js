@@ -43,7 +43,7 @@ export class Configure extends React.Component {
         }
 
         // let credentials = (config.carto && config.carto.credentials) || {}
-        let credentials = (config.credentials && config.credentails.carto) || {}
+        let credentials = (config.credentials && config.credentials.carto) || {}
 
         const Field = (type, icon, className = '') => (
             <div className="pt-input-group">
