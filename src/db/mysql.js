@@ -250,6 +250,7 @@ async function disconnectDB() {
 
 export function escapeValue(val) {
     if (!isNaN(val)) return '' + val
+    if (val === undefined) return "''"
     return "'" + (val + '').replace(/'/g, "''") + "'"
 }
 
