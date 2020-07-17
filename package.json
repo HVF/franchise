@@ -35,7 +35,7 @@
     "graphql": "^14.3.1",
     "graphql-request": "^1.4.0",
     "leaflet": "^1.4.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "normalize.css": "^5.0.0",
     "rc-tabs": "^7.1.1",
     "react": "^16.8.6",
